@@ -2,10 +2,65 @@ from flask import Blueprint, request, jsonify, url_for, send_from_directory, cur
 from yt_dlp import YoutubeDL
 import os, urllib.request,zipfile ,tarfile, ssl, certifi, shutil
 app2 = Blueprint("descargas", __name__)
-
+import os, zipfile, tarfile, urllib.request, shutil, ssl, certifi, platform
 ffmpeg_dir = os.path.dirname(os.path.abspath(__file__))
+# Detectar sistema operativo
+is_windows = platform.system().lower().startswith("win")
+print(is_windows)
+is_linux = platform.system().lower().startswith("linux")
+print(is_linux)
+if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
+    print("FFmpeg no encontrado. Descargando...")
+    ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
 
-'''if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
+    if is_windows:
+        url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+        os.system(f"curl -L {url} -o {ffmpeg_dir}/ffmpeg.zip")
+        zipfile.ZipFile(f"{ffmpeg_dir}/ffmpeg.zip", 'r').extractall(ffmpeg_dir)
+        old_path = f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build"
+        new_path = f"{ffmpeg_dir}/ffmpeg"
+        if not os.path.exists(new_path):
+            os.rename(old_path, new_path)
+            print("✅ Carpeta renombrada a ffmpeg")
+        else:
+            print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
+
+        if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.zip"):
+            os.remove(f"{ffmpeg_dir}/ffmpeg.zip")
+
+        if os.path.exists(f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build"):
+            shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build")
+        
+    elif is_linux:
+        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+        archivo = f"{ffmpeg_dir}/ffmpeg.tar.xz"
+        urllib.request.urlretrieve(url, archivo)
+        tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
+        print("✅ Extraído")
+        old_path = os.path.join(ffmpeg_dir, "ffmpeg-7.0.2-amd64-static")
+        new_path = os.path.join(ffmpeg_dir, "ffmpeg")
+        if not os.path.exists(new_path):
+            os.rename(old_path, new_path)
+            print("✅ Carpeta renombrada a ffmpeg")
+        else:
+            print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
+
+        if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.tar.xz"):
+            os.remove(f"{ffmpeg_dir}/ffmpeg.tar.xz")
+        #if os.path.exists(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static"):
+        #    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static")
+
+        # Dar permisos de ejecución al binario
+        os.chmod(f"{ffmpeg_dir}/ffmpeg", 0o755)
+        #os.chmod(ffmpeg_bin, 0o755)
+        #os.chmod(ffprobe_bin, 0o755)
+    else:
+        raise Exception("❌ Sistema operativo no soportado")
+
+'''ffmpeg_dir = os.path.dirname(os.path.abspath(__file__))
+windows = ""
+linux = ""
+if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
     url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
     os.system(f"curl -L {url} -o {ffmpeg_dir}/ffmpeg.zip")
     #urllib.request.urlretrieve(url, f"{ffmpeg_dir}/ffmpeg.zip")
@@ -23,7 +78,7 @@ if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.zip"):
     os.remove(f"{ffmpeg_dir}/ffmpeg.zip")
 
 if os.path.exists(f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build"):
-    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build")'''
+    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build")
 # sys.exit(0)  # <--- termina el programa aquí
 ################################
 if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
@@ -56,7 +111,7 @@ if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.tar.xz"):
 # Dar permisos de ejecución al binario
 os.chmod(f"{ffmpeg_dir}/ffmpeg", 0o755)
 #os.chmod(ffmpeg_bin, 0o755)
-#os.chmod(ffprobe_bin, 0o755)
+#os.chmod(ffprobe_bin, 0o755)'''
 ##################################################
 #BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -79,14 +134,12 @@ print(FFMPEG_PATH)
 
 @app2.route("/descargar", methods=["POST"])
 def descargarx():
-    #url = request.form.get("url")
     url = request.form.get("url").split("?")[0]
     download_type = request.form.get("download_type", "video")
 
     if not url:
         return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
 
-    #url = url.split("?")[0]
     #extension = "m4a" if download_type == "audio" else "mp4"
     extension = "m4a" if download_type == "audio" else "webm"
 
@@ -142,14 +195,14 @@ def descargarx():
 def descargar_flutterx():
     try:
         data = request.get_json()
-        url = data.get("url")
+        url = data.get("url").split("?")[0]
         download_type = data.get("download_type", "video")
 
         if not url:
             return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
 
-        url = url.split("?")[0]
-        extension = "m4a" if download_type == "audio" else "mp4"
+        #url = url.split("?")[0]
+        extension = "m4a" if download_type == "audio" else "webm"
 
         # Generar nombre único
         counter = 1
@@ -166,9 +219,6 @@ def descargar_flutterx():
                     "ffmpeg_location": FFMPEG_PATH,
                     "quiet": True,
                     "noplaylist": True,
-                    #"postprocessor_args": ["-y"],  # evita renombrado duplicado
-                    #"keepvideo": False,             # elimina el archivo temporal
-                    #"prefer_ffmpeg": True,          # asegura uso de ffmpeg
                 }
             else:
                 ydl_opts = {
