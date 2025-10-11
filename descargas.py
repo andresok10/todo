@@ -239,7 +239,9 @@ def descarga_flutterx():
 
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
         #download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
-        download_url = url_for("descargax", file=file_basename, _external=True, _scheme="https")
+        #download_url = url_for("descargax", file=file_basename, _external=True, _scheme="https")
+        download_url = url_for("descargas.serve_download", file=file_basename, _external=True, _scheme="https")
+
 
         msgx = f"{download_type.capitalize()} descargado con éxito como {file_basename}."
         return jsonify({
