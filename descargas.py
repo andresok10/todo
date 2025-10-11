@@ -161,6 +161,12 @@ def descargaxx():
         #"postprocessor_args": ["-y"],  # evita renombrado duplicado
         #"keepvideo": False,             # elimina el archivo temporal
         #"prefer_ffmpeg": True,          # asegura uso de ffmpeg
+
+        "postprocessors": [{
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": extension,  # fuerza la extensión deseada
+            "preferredquality": "192",
+        }],
     }
 
     try:
