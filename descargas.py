@@ -199,7 +199,7 @@ def descarga_flutterx():
             return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
 
         #url = url.split("?")[0]
-        #extension = "m4a" if download_type == "audio" else "webm"
+        extension = "m4a" if download_type == "audio" else "webm"
 
         # Generar nombre único
         counter = 1
@@ -219,7 +219,7 @@ def descarga_flutterx():
             "noplaylist": True,
             "postprocessors": [{
                 "key": "FFmpegExtractAudio",
-                "preferredcodec": "m4a" if download_type == "audio" else "webm",
+                "preferredcodec": extension,
                 "preferredquality": "192",
         }],
         }
