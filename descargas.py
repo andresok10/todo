@@ -210,12 +210,18 @@ def descarga_flutterx():
                 break
             counter += 1
 
+        #"format": "bestaudio/best" if download_type == "audio" else "best",
         ydl_opts = {
-            "format": "bestaudio/best" if download_type == "audio" else "best",
+            "format": "bestaudio/best" if download_type == "audio" else "bestvideo+bestaudio/best",
             "outtmpl": file,
             "ffmpeg_location": FFMPEG_PATH,
             "quiet": True,
             "noplaylist": True,
+            "postprocessors": [{
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": extension,  # fuerza la extensión deseada
+                "preferredquality": "192",
+        }],
         }
 
         # Descargar archivo
