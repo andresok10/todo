@@ -208,26 +208,18 @@ def descarga_flutterx():
         # Generar nombre único
         counter = 1
         while True:
-            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            #file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            file = f"{BASE_DIR}/descarga/{counter}"
             if not os.path.exists(file):
                 break
             counter += 1
 
-        if download_type == "audio":
-            ydl_opts = {
-                "format": "bestaudio/best",
-                "outtmpl": file,
-                "ffmpeg_location": FFMPEG_PATH,
-                "quiet": True,
-                "noplaylist": True,
-            }
-        else:
-            ydl_opts = {
-                "format": "best",
-                "outtmpl": file,
-                "ffmpeg_location": FFMPEG_PATH,
-                "quiet": True,
-                "noplaylist": True,
+        ydl_opts = {
+            "format": "bestaudio/best" if download_type == "audio" else "best",
+            "outtmpl": file,
+            "ffmpeg_location": FFMPEG_PATH,
+            "quiet": True,
+            "noplaylist": True,
             }
 
         # Descargar archivo
