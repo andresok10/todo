@@ -115,11 +115,12 @@ os.chmod(f"{ffmpeg_dir}/ffmpeg", 0o755)
 ##################################################
 #BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+print(BASE_DIR)
 os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
 
 #FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
 FFMPEG_PATH = f"{BASE_DIR}/ffmpeg" # linux
-print(FFMPEG_PATH)
+print(FFMPEG_PATH) #/opt/render/project/src/ffmpeg
 
 #app.config["BASE_DIR"] = BASE_DIR
 #app.config["FFMPEG_PATH"] = FFMPEG_PATH
@@ -212,22 +213,22 @@ def descargar_flutterx():
                 break
             counter += 1
 
-            if download_type == "audio":
-                ydl_opts = {
-                    "format": "bestaudio/best",
-                    "outtmpl": file,
-                    "ffmpeg_location": FFMPEG_PATH,
-                    "quiet": True,
-                    "noplaylist": True,
-                }
-            else:
-                ydl_opts = {
-                    "format": "best",
-                    "outtmpl": file,
-                    "ffmpeg_location": FFMPEG_PATH,
-                    "quiet": True,
-                    "noplaylist": True,
-                }
+        if download_type == "audio":
+            ydl_opts = {
+                "format": "bestaudio/best",
+                "outtmpl": file,
+                "ffmpeg_location": FFMPEG_PATH,
+                "quiet": True,
+                "noplaylist": True,
+            }
+        else:
+            ydl_opts = {
+                "format": "best",
+                "outtmpl": file,
+                "ffmpeg_location": FFMPEG_PATH,
+                "quiet": True,
+                "noplaylist": True,
+            }
 
         # Descargar archivo
         with YoutubeDL(ydl_opts) as ydl:
