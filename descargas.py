@@ -152,26 +152,16 @@ def descargaxx():
             break
         counter += 1
 
-    # Configuración de yt-dlp según tipo de descarga or download_type == "video"
-    if download_type == "audio":
-        ydl_opts = {
-            "format": "bestaudio/best",
-            "outtmpl": file,
-            "ffmpeg_location": FFMPEG_PATH,
-            "quiet": True,
-            "noplaylist": True,
-            #"postprocessor_args": ["-y"],  # evita renombrado duplicado
-            #"keepvideo": False,             # elimina el archivo temporal
-            #"prefer_ffmpeg": True,          # asegura uso de ffmpeg
-        }
-    else:
-        ydl_opts = {
-            "format": "best",
-            "outtmpl": file,
-            "ffmpeg_location": FFMPEG_PATH,
-            "quiet": True,
-            "noplaylist": True,
-        }
+    ydl_opts = {
+        "format": "bestaudio/best" if download_type == "audio" else "best",
+        "outtmpl": file,
+        "ffmpeg_location": FFMPEG_PATH,
+        "quiet": True,
+        "noplaylist": True,
+        #"postprocessor_args": ["-y"],  # evita renombrado duplicado
+        #"keepvideo": False,             # elimina el archivo temporal
+        #"prefer_ffmpeg": True,          # asegura uso de ffmpeg
+    }
 
     try:
         with YoutubeDL(ydl_opts) as ydl:
@@ -220,7 +210,7 @@ def descarga_flutterx():
             "ffmpeg_location": FFMPEG_PATH,
             "quiet": True,
             "noplaylist": True,
-            }
+        }
 
         # Descargar archivo
         with YoutubeDL(ydl_opts) as ydl:
