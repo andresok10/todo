@@ -133,8 +133,8 @@ print(FFMPEG_PATH) #/opt/render/project/src/ffmpeg
 #    BASE_DIR = current_app.config["BASE_DIR"]
 #    FFMPEG_PATH = current_app.config["FFMPEG_PATH"]
 
-@app2.route("/descargar", methods=["POST"])
-def descargarx():
+@app2.route("/descarga", methods=["POST"])
+def descargaxx():
     url = request.form.get("url").split("?")[0]
     download_type = request.form.get("download_type", "video")
 
@@ -192,8 +192,8 @@ def descargarx():
     except Exception as e:
         return jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}), 500
     
-@app2.route("/descargar_flutter", methods=["POST"])
-def descargar_flutterx():
+@app2.route("/descarga_flutter", methods=["POST"])
+def descarga_flutterx():
     try:
         data = request.get_json()
         url = data.get("url").split("?")[0]
@@ -238,7 +238,8 @@ def descargar_flutterx():
         file_basename = os.path.basename(file)
 
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
-        download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
+        #download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
+        download_url = url_for("descargax", file=file_basename, _external=True, _scheme="https")
 
         msgx = f"{download_type.capitalize()} descargado con éxito como {file_basename}."
         return jsonify({
@@ -253,7 +254,7 @@ def descargar_flutterx():
             "status": "error","msg": f"Error al descargar el archivo: {str(e)}"}), 500
 
 # ✅ Servir correctamente los archivos desde /downloads/
-@app2.route("/descarga/<path:file>")
+@app2.route("/descargax/<path:file>")
 def serve_download(file):
     """Sirve los archivos descargados directamente"""
     return send_from_directory(f"{BASE_DIR}/descarga", file, as_attachment=True)
