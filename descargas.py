@@ -234,8 +234,9 @@ def descarga_flutterx():
             ydl.download([url])
 
         # Nombre base del archivo descargado
-        file_basename = os.path.basename(file)
+        #file_basename = os.path.basename(file)
         #file_basename = f"{BASE_DIR}/descarga/{counter}.{extension}"
+        file_basename = f"{counter}.{ext}"
 
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
         #download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
