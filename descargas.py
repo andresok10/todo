@@ -148,8 +148,8 @@ def descarga_flutterx():
         # Generar nombre único
         counter = 1
         while True:
-            #file = f"{BASE_DIR}/descarga/{counter}.{extension}"
-            file = f"{BASE_DIR}/descarga/{counter}"
+            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            #file = f"{BASE_DIR}/descarga/{counter}"
             if not os.path.exists(file):
                 break
             counter += 1
@@ -166,18 +166,19 @@ def descarga_flutterx():
             }
         else: # video
             ydl_opts = {
+                "outtmpl": file,  # añadir extensión aquí,
                 #"outtmpl": f"{counter}.{extension}",  # añadir extensión aquí,
-                "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
+                #"outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
                 #"format": "bestvideo+bestaudio/best",
                 #"merge_output_format": extension,  # 🔥 esta línea fuerza la extensión
-                #'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best',
-                'format': 'best',
+                'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best',
+                #'format': 'best',
                 'merge_output_format': 'webm',
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": False,
                 "noplaylist": True,
-                #'postprocessor_args': ['-strict', '-2'],  # opcional
-                'postprocessor_args': ['-c', 'copy', '-strict', '-2']
+                'postprocessor_args': ['-strict', '-2'],  # opcional
+                #'postprocessor_args': ['-c', 'copy', '-strict', '-2']
 
             }
 
