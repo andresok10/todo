@@ -220,7 +220,7 @@ def descarga_flutterx():
             }
         else: # video
             ydl_opts = {
-                "format": "bestvideo+bestaudio",
+                "format": "best",
                 "outtmpl": file,  # añadir extensión aquí,
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": True,
