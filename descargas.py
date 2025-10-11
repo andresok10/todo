@@ -165,13 +165,14 @@ def descarga_flutterx():
             }
         else: # video
             ydl_opts = {
-                "outtmpl": file,  # añadir extensión aquí,
+                "outtmpl": file+extension,  # añadir extensión aquí,
                 #"format": "bestvideo+bestaudio/best",
                 #"merge_output_format": extension,  # 🔥 esta línea fuerza la extensión
                 'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best',
                 'merge_output_format': 'webm',
+                'postprocessor_args': ['-strict', '-2'],  # opcional
                 "ffmpeg_location": FFMPEG_PATH,
-                "quiet": True,
+                #"quiet": True,
                 "noplaylist": True,
             }
 
