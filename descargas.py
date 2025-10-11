@@ -167,7 +167,7 @@ def descarga_flutterx():
         else: # video
             ydl_opts = {
                 #"outtmpl": f"{counter}.{extension}",  # añadir extensión aquí,
-                "outtmpl": file,  # añadir extensión aquí,
+                "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
                 #"format": "bestvideo+bestaudio/best",
                 #"merge_output_format": extension,  # 🔥 esta línea fuerza la extensión
                 #'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best',
