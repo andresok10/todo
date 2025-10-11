@@ -119,7 +119,7 @@ print(BASE_DIR)
 os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
 
 #FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
-FFMPEG_PATH = f"{BASE_DIR}/ffmpeg" # linux
+FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/ffmpeg" # linux
 print(FFMPEG_PATH) #/opt/render/project/src/ffmpeg
 
 #app.config["BASE_DIR"] = BASE_DIR
