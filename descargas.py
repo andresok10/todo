@@ -148,8 +148,8 @@ def descarga_flutterx():
         # Generar nombre único
         counter = 1
         while True:
-            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
-            #file = f"{BASE_DIR}/descarga/{counter}"
+            #file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            file = f"{BASE_DIR}/descarga/{counter}"
             if not os.path.exists(file):
                 break
             counter += 1
@@ -170,7 +170,8 @@ def descarga_flutterx():
                 "outtmpl": file,  # añadir extensión aquí,
                 #"format": "bestvideo+bestaudio/best",
                 #"merge_output_format": extension,  # 🔥 esta línea fuerza la extensión
-                'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best',
+                #'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best',
+                'format': 'best',
                 'merge_output_format': 'webm',
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": False,
