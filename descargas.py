@@ -62,8 +62,8 @@ os.chmod(f"{ffmpeg_dir}/ffmpeg", 0o755)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
 
-FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
-#FFMPEG_PATH = f"{BASE_DIR}/ffmpeg" # linux
+#FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
+FFMPEG_PATH = f"{BASE_DIR}/ffmpeg" # linux
 print(FFMPEG_PATH)
 
 #app.config["BASE_DIR"] = BASE_DIR
