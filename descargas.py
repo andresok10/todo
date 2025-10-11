@@ -199,7 +199,7 @@ def descarga_flutterx():
         if not url:
             return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
 
-        #extension = "m4a" if download_type == "audio" else "webm"
+        ext = "m4a" if download_type == "audio" else "webm"
 
         # Generar nombre único
         counter = 1
@@ -221,9 +221,9 @@ def descarga_flutterx():
             }
         else: # video
             ydl_opts = {
-                "format": "best",
+                "format": "bestvideo+bestaudio/best",
                 "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
-                "merge_output_format": "webm",  # 🔥 esta línea fuerza la extensión
+                "merge_output_format": ext,  # 🔥 esta línea fuerza la extensión
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": True,
                 "noplaylist": True,
