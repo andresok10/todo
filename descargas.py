@@ -186,10 +186,14 @@ def descarga_flutterx():
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
+        # Después de descargar con yt_dlp
+        file_basename = os.path.basename(file)  # ej: 1.webm, 2.m4a, etc.
+        real_extension = file_basename.split(".")[-1]  # extrae 'webm', 'mp4', etc.
+
         # Nombre base del archivo descargado
         #file_basename = os.path.basename(file)
         #file_basename = f"{BASE_DIR}/descarga/{counter}.{extension}"
-        file_basename = f"{counter}.{extension}"
+        #file_basename = f"{counter}.{extension}"
 
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
         #download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
@@ -201,7 +205,8 @@ def descarga_flutterx():
         return jsonify({
             "status": "success",
             "msg": msgx,
-            "download_url": download_url
+            "download_url": download_url,
+            "extension": real_extension  # enviamos la extensión real
         })
 
     except Exception as e:
