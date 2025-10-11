@@ -198,7 +198,6 @@ def descarga_flutterx():
         if not url:
             return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
 
-        #url = url.split("?")[0]
         extension = "m4a" if download_type == "audio" else "webm"
 
         # Generar nombre único
@@ -211,18 +210,27 @@ def descarga_flutterx():
             counter += 1
 
         #"format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
+        if download_type == "audio":
+            postprocessor = [{
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": extension,
+                "preferredquality": "192",
+            }]
+        else:  # video
+            postprocessor = [{
+                "key": "FFmpegVideoConvertor",
+                "preferedformat": extension,  # para video
+            }]
+
         ydl_opts = {
             "format": "bestaudio/best" if download_type == "audio" else "bestvideo+bestaudio",
             "outtmpl": file,
             "ffmpeg_location": FFMPEG_PATH,
             "quiet": True,
             "noplaylist": True,
-            "postprocessors": [{
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": extension,
-                "preferredquality": "192",
-        }],
+            "postprocessors": postprocessor,
         }
+
 
         # Descargar archivo
         with YoutubeDL(ydl_opts) as ydl:
