@@ -248,6 +248,7 @@ def descargar_flutterx():
         })
 
     except Exception as e:
+        print("❌ ERROR:", str(e))
         return jsonify({
             "status": "error","msg": f"Error al descargar el archivo: {str(e)}"}), 500
 
