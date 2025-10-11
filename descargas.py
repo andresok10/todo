@@ -51,7 +51,7 @@ if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
         #    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static")
 
         # Dar permisos de ejecución al binario
-        os.chmod(f"{ffmpeg_dir}/ffmpeg", 0o755)
+        os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
         #os.chmod(ffmpeg_bin, 0o755)
         #os.chmod(ffprobe_bin, 0o755)
     else:
