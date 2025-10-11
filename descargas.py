@@ -56,62 +56,6 @@ if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
         #os.chmod(ffprobe_bin, 0o755)
     else:
         raise Exception("❌ Sistema operativo no soportado")
-
-'''ffmpeg_dir = os.path.dirname(os.path.abspath(__file__))
-windows = ""
-linux = ""
-if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
-    url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
-    os.system(f"curl -L {url} -o {ffmpeg_dir}/ffmpeg.zip")
-    #urllib.request.urlretrieve(url, f"{ffmpeg_dir}/ffmpeg.zip")
-    zipfile.ZipFile(f"{ffmpeg_dir}/ffmpeg.zip", 'r').extractall(ffmpeg_dir)
-
-old_path = f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build"
-new_path = f"{ffmpeg_dir}/ffmpeg"
-if not os.path.exists(new_path):
-    os.rename(old_path, new_path)
-    print("✅ Carpeta renombrada a ffmpeg")
-else:
-    print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
-
-if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.zip"):
-    os.remove(f"{ffmpeg_dir}/ffmpeg.zip")
-
-if os.path.exists(f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build"):
-    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-8.0-essentials_build")
-# sys.exit(0)  # <--- termina el programa aquí
-################################
-if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
-    print("FFmpeg no encontrado. Descargando...")
-    # Usar certificados válidos para evitar error SSL
-    ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
-
-    # URL del build Linux de FFmpeg (static, release)
-    url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-    ffmpeg_tar = os.path.join(ffmpeg_dir, "ffmpeg.tar.xz")
-
-    # Descargar archivo
-    urllib.request.urlretrieve(url, ffmpeg_tar)
-    tarfile.open(ffmpeg_tar, "r:xz").extractall(ffmpeg_dir, filter="data")
-    print("✅ Extraído")
-
-old_path = os.path.join(ffmpeg_dir, "ffmpeg-7.0.2-amd64-static")
-new_path = os.path.join(ffmpeg_dir, "ffmpeg")
-if not os.path.exists(new_path):
-    os.rename(old_path, new_path)
-    print("✅ Carpeta renombrada a ffmpeg")
-else:
-    print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
-
-if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.tar.xz"):
-    os.remove(f"{ffmpeg_dir}/ffmpeg.tar.xz")
-#if os.path.exists(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static"):
-#    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static")
-
-# Dar permisos de ejecución al binario
-os.chmod(f"{ffmpeg_dir}/ffmpeg", 0o755)
-#os.chmod(ffmpeg_bin, 0o755)
-#os.chmod(ffprobe_bin, 0o755)'''
 ##################################################
 #BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -199,7 +143,7 @@ def descarga_flutterx():
         if not url:
             return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
 
-        ext = "m4a" if download_type == "audio" else "webm"
+        extension = "m4a" if download_type == "audio" else "webm"
 
         # Generar nombre único
         counter = 1
@@ -221,9 +165,11 @@ def descarga_flutterx():
             }
         else: # video
             ydl_opts = {
-                "format": "bestvideo+bestaudio/best",
                 "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
-                "merge_output_format": ext,  # 🔥 esta línea fuerza la extensión
+                #"format": "bestvideo+bestaudio/best",
+                #"merge_output_format": extension,  # 🔥 esta línea fuerza la extensión
+                'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best',
+                'merge_output_format': 'webm',
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": True,
                 "noplaylist": True,
@@ -236,7 +182,7 @@ def descarga_flutterx():
         # Nombre base del archivo descargado
         #file_basename = os.path.basename(file)
         #file_basename = f"{BASE_DIR}/descarga/{counter}.{extension}"
-        file_basename = f"{counter}.{ext}"
+        file_basename = f"{counter}.{extension}"
 
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
         #download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
