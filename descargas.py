@@ -222,6 +222,7 @@ def descarga_flutterx():
             ydl_opts = {
                 "format": "best",
                 "outtmpl": file,  # añadir extensión aquí,
+                "merge_output_format": file,  # 🔥 esta línea fuerza la extensión
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": True,
                 "noplaylist": True,
