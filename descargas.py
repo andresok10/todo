@@ -222,7 +222,7 @@ def descarga_flutterx():
             ydl_opts = {
                 "format": "best",
                 "outtmpl": file,  # añadir extensión aquí,
-                "merge_output_format": f"{file}.{extension}",  # 🔥 esta línea fuerza la extensión
+                "merge_output_format": extension,  # 🔥 esta línea fuerza la extensión
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": True,
                 "noplaylist": True,
@@ -233,8 +233,8 @@ def descarga_flutterx():
             ydl.download([url])
 
         # Nombre base del archivo descargado
-        #file_basename = os.path.basename(file)
-        file_basename = f"{BASE_DIR}/descarga/{counter}.{extension}"
+        file_basename = os.path.basename(file)
+        #file_basename = f"{BASE_DIR}/descarga/{counter}.{extension}"
 
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
         #download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
