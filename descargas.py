@@ -138,7 +138,7 @@ def descarga_flutterx():
         data = request.get_json()
         url = data.get("url").split("?")[0]
         download_type = data.get("download_type", "video")
-        #extension = data.get("extension", "webm")  # ej: mp4, mkv, webm, avi, mp3...
+        extension = data.get("extension", "webm")  # ej: mp4, mkv, webm, avi, mp3...
 
         if not url:
             return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
@@ -173,9 +173,9 @@ def descarga_flutterx():
                 #"merge_output_format": extension,  # 🔥 esta línea fuerza la extensión
                 'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best',
                 #'format': 'best',
-                'merge_output_format': 'webm',
+                'merge_output_format': extension,
                 "ffmpeg_location": FFMPEG_PATH,
-                "quiet": False,
+                #"quiet": False,
                 "noplaylist": True,
                 'postprocessor_args': ['-strict', '-2'],  # opcional
                 #'postprocessor_args': ['-c', 'copy', '-strict', '-2']
