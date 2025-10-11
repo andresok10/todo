@@ -210,13 +210,22 @@ def descarga_flutterx():
             counter += 1
 
         #"format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
-        ydl_opts = {
-            "format": "bestaudio/best" if download_type == "audio" else "best",
-            "outtmpl": f"{file}.{extension}",  # añadir extensión aquí,
-            "ffmpeg_location": FFMPEG_PATH,
-            "quiet": True,
-            "noplaylist": True,
-        }
+        if download_type == "audio":
+            ydl_opts = {
+                "format": "bestaudio/best",
+                "outtmpl": f"{file}.{extension}",  # añadir extensión aquí,
+                "ffmpeg_location": FFMPEG_PATH,
+                "quiet": True,
+                "noplaylist": True,
+            }
+        else: # video
+            ydl_opts = {
+                "format": "best",
+                "outtmpl": f"{file}.{extension}",  # añadir extensión aquí,
+                "ffmpeg_location": FFMPEG_PATH,
+                "quiet": True,
+                "noplaylist": True,
+            }
 
         # Descargar archivo
         with YoutubeDL(ydl_opts) as ydl:
