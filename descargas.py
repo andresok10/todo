@@ -231,7 +231,7 @@ for ruta in estructura:
 
 ##############################################
 #carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "descargas")
-carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "descargas")
+carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "descarga")
 if os.path.exists(carpeta):
     print(f"📂 Contenido de: {carpeta}\n")
     for nombre in os.listdir(carpeta):
