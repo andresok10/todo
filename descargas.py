@@ -186,17 +186,6 @@ def descarga_flutterx():
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
-        # ✅ Mostrar contenido de la carpeta descarga después de la descarga
-        carpeta = os.path.join(BASE_DIR, "descarga")
-        if os.path.exists(carpeta):
-            print(f"📂 Contenido actual de: {carpeta}")
-            for nombre in os.listdir(carpeta):
-                #ruta_completa = os.path.join(carpeta, nombre)
-                #print("   ➜", ruta_completa)
-                print("   ➜", nombre)  # Solo el nombre del archivo
-        else:
-            print(f"❌ La carpeta {carpeta} no existe.")
-
         # Después de descargar con yt_dlp  # Generar respuesta
         file_basename = os.path.basename(file)  # ej: 1.webm, 2.m4a, etc.
         real_extension = file_basename.split(".")[-1]  # extrae 'webm', 'mp4', etc.
@@ -221,10 +210,7 @@ def descarga_flutterx():
         })
     except Exception as e:
         print("❌ ERROR:", str(e))
-        return jsonify({
-            "status": "error",
-            "msg": f"Error al descargar el archivo: {str(e)}"
-        }), 500
+        return jsonify({"status": "error","msg": f"Error al descargar el archivo: {str(e)}"}), 500
 
     finally:
         # 🔁 Esto se ejecuta siempre, haya error o no
@@ -232,14 +218,11 @@ def descarga_flutterx():
         if os.path.exists(carpeta):
             print(f"📂 Contenido actual de: {carpeta}")
             for nombre in os.listdir(carpeta):
+                #ruta_completa = os.path.join(carpeta, nombre)
+                #print("   ➜", ruta_completa)
                 print("   ➜", nombre)
         else:
             print(f"❌ La carpeta {carpeta} no existe.")
-    
-    #except Exception as e:
-    #    print("❌ ERROR:", str(e))
-       
-    #return jsonify({"status": "error","msg": f"Error al descargar el archivo: {str(e)}"}), 500
 
 # ✅ Servir correctamente los archivos desde /downloads/
 @app2.route("/descargax/<path:file>")
