@@ -229,27 +229,7 @@ def descarga_flutterx():
 def serve_download(file):
     """Sirve los archivos descargados directamente"""
     return send_from_directory(f"{BASE_DIR}/descarga", file, as_attachment=True)
-
-'''estructura = []
-for root, dirs, files in os.walk(os.path.dirname(os.path.abspath(__file__))):
-    for name in dirs:
-        estructura.append(os.path.join(root, name))
-    for name in files:
-        estructura.append(os.path.join(root, name))
-# Mostrar todo en consola
-for ruta in estructura:
-    print(ruta)'''
-
-##############################################
-
-#@app.route("/downloads/<path:filename>")
-#def serve_download(filename):
-#    return send_from_directory(f"{BASE_DIR}/downloads", os.path.basename(filename), as_attachment=True)
-
-#@app.route("/downloads/<path:filename>")
-#def serve_download(filename):
-    #return send_from_directory(f"{BASE_DIR}/downloads", filename, as_attachment=True)
-#    return send_from_directory(f"{BASE_DIR}/downloads", os.path.basename(filename), as_attachment=True)
+    #return send_from_directory(f"{BASE_DIR}/downloads", os.path.basename(filename), as_attachment=True)
 
 ## Si quieres habilitar descarga directa de archivos:
 #@app.route("/downloads/<path:filename>")
