@@ -208,10 +208,20 @@ def descarga_flutterx():
             "download_url": download_url,
             "extension": real_extension  # enviamos la extensión real
         })
-
     except Exception as e:
         print("❌ ERROR:", str(e))
-        return jsonify({"status": "error","msg": f"Error al descargar el archivo: {str(e)}"}), 500
+
+    # Mostrar contenido de la carpeta descarga
+    carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "descarga")
+    if os.path.exists(carpeta):
+        print(f"📂 Contenido de: {carpeta}\n")
+        for nombre in os.listdir(carpeta):
+            ruta_completa = os.path.join(carpeta, nombre)
+            print(ruta_completa)
+    else:
+        print(f"❌ La carpeta {carpeta} no existe.")
+        
+    return jsonify({"status": "error","msg": f"Error al descargar el archivo: {str(e)}"}), 500
 
 # ✅ Servir correctamente los archivos desde /downloads/
 @app2.route("/descargax/<path:file>")

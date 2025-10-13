@@ -18,13 +18,13 @@ app.register_blueprint(app2)
     
 if __name__ == "__main__":
     # Mostrar contenido de la carpeta descarga
-    carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "descarga")
+    '''carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "descarga")
     if os.path.exists(carpeta):
         print(f"📂 Contenido de: {carpeta}\n")
         for nombre in os.listdir(carpeta):
             ruta_completa = os.path.join(carpeta, nombre)
             print(ruta_completa)
     else:
-        print(f"❌ La carpeta {carpeta} no existe.")
+        print(f"❌ La carpeta {carpeta} no existe.")'''
     port = int(os.environ.get("PORT", 5002))
     app.run(host="0.0.0.0", port=port, debug=True)
