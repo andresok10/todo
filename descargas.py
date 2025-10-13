@@ -219,16 +219,26 @@ def serve_download(file):
     """Sirve los archivos descargados directamente"""
     return send_from_directory(f"{BASE_DIR}/descarga", file, as_attachment=True)
 
-estructura = []
+'''estructura = []
 for root, dirs, files in os.walk(os.path.dirname(os.path.abspath(__file__))):
     for name in dirs:
         estructura.append(os.path.join(root, name))
     for name in files:
         estructura.append(os.path.join(root, name))
-
 # Mostrar todo en consola
 for ruta in estructura:
-    print(ruta)
+    print(ruta)'''
+
+##############################################
+#carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "descargas")
+carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "descargas")
+if os.path.exists(carpeta):
+    print(f"📂 Contenido de: {carpeta}\n")
+    for nombre in os.listdir(carpeta):
+        ruta_completa = os.path.join(carpeta, nombre)
+        print(ruta_completa)
+else:
+    print(f"❌ La carpeta {carpeta} no existe.")
 
 #@app.route("/downloads/<path:filename>")
 #def serve_download(filename):
