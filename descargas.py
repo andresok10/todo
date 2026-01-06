@@ -70,6 +70,15 @@ def descarga_flutterx():
 
         # Archivo temporal para descargar con yt-dlp
         tmp_file = os.path.join(carpeta, f"temp.%(ext)s")  # siempre fijo, evita conflictos
+
+        # Generar nombre único
+        counter = 1
+        while True:
+            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            # file = f"{BASE_DIR}/descarga/{counter}"
+            if not os.path.exists(file):
+                break
+            counter += 1
         
         # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
@@ -101,15 +110,6 @@ def descarga_flutterx():
         # Descargar archivo
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
-
-        # Generar nombre único
-        counter = 1
-        while True:
-            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
-            # file = f"{BASE_DIR}/descarga/{counter}"
-            if not os.path.exists(file):
-                break
-            counter += 1
 
         # Renombrar temporal a archivo final con contador
         for f in glob.glob(os.path.join(carpeta, "temp.*")):
@@ -181,6 +181,7 @@ def descarga_flutterx():
                 current_app.logger.info(f"   ➜ {archivo}")
                 #os.remove(archivo)
                 os.remove(os.path.join(carpeta, archivo))
+            current_app.logger.info(f"📂 Contenido actual2 de {carpeta}:")
             for archivo in os.listdir(carpeta):
                 current_app.logger.info(f"   ➜ {archivo}")
         # else:
