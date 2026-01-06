@@ -80,7 +80,7 @@ def descarga_flutterx():
         for archivo in os.listdir(CARPETA_DESCARGA):
             print("   ➜", archivo)
     else:
-        print(f"❌ La carpeta {carpeta} no existe.")
+        print(f"❌ La carpeta {CARPETA_DESCARGA} no existe.")
     try:
         data = request.get_json()
         url = data.get("url").split("?")[0]
