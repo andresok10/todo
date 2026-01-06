@@ -64,22 +64,22 @@ def descarga_flutterx():
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
         print(ruta_completa)
         print("   ➜", archivo, end="\n")
-        try:
+        '''try:
             os.remove(ruta_completa)
             print(f"archivo eliminado {archivo}")
         except Exception as exep:
-            print(f"no se pudo eliminar {archivo}: {exep}")
+            print(f"no se pudo eliminar {archivo}: {exep}")'''
     print("#############################################")
     
     for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
         print(f"📂 Contenido actual 2 de CARPETA_DESCARGA {f}:")
-        #try:
-        #    os.remove(f)
-        #    print(f"archivo eliminado {f}")
+        '''try:
+            os.remove(f)
             #current_app.logger.info(f"archivo eliminado {f}")
-        #except Exception as exep:
-        #    print(f"no se pudo eliminar {f}: {exep}")
+            print(f"archivo eliminado {f}")
+        except Exception as exep:
             #current_app.logger.error(f"❌ No se pudo eliminar {f}: {exep}")
+            print(f"no se pudo eliminar {f}: {exep}")'''
 
     try:
         data = request.get_json()
