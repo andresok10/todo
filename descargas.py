@@ -112,9 +112,15 @@ def descarga_flutterx():
             ydl.download([url])
 
         # Renombrar temporal a archivo final con contador
-        for f in glob.glob(os.path.join(carpeta, "temp.*")):
+        #for f in glob.glob(os.path.join(carpeta, "temp.*")):
             #os.rename(f, final_file)
-            os.rename(f, file)
+        #    os.rename(f, file)
+
+        # Renombrar temporal a archivo final (solo si existe)
+        temp_files = glob.glob(os.path.join(carpeta, "temp.*"))
+        if not temp_files:
+            raise FileNotFoundError("No se encontró archivo temporal descargado.")
+        os.rename(temp_files[0], final_file)
 
         # Después de descargar con yt_dlp  # Generar respuesta
         file_basename = os.path.basename(file)  # ej: 1.webm, 2.m4a, etc.
@@ -179,9 +185,18 @@ def descarga_flutterx():
             current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
             for archivo in os.listdir(carpeta):
                 current_app.logger.info(f"   ➜ {archivo}")
-                #os.remove(archivo)
-                os.remove(os.path.join(carpeta, archivo))
-            current_app.logger.info(f"📂 Contenido actual2 de {carpeta}:")
+
+        # Limpiar temporales residuales, pero nunca los finales
+        temp_files = glob.glob(os.path.join(carpeta, "temp.*"))
+        for f in temp_files:
+            try:
+                os.remove(f)
+                current_app.logger.info(f"🗑 Eliminado temporal residual: {f}")
+            except Exception as ex:
+                current_app.logger.error(f"❌ No se pudo eliminar {f}: {ex}")
+
+        if os.path.exists(carpeta):
+            current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
             for archivo in os.listdir(carpeta):
                 current_app.logger.info(f"   ➜ {archivo}")
         # else:
