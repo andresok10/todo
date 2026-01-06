@@ -73,12 +73,12 @@ def descarga_flutterx():
                 ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
                 current_app.logger.info(f"   ➜ {ruta_completa}")
                 #try:
-                os.remove(os.path.join(CARPETA_DESCARGA, archivo))
-                current_app.logger.info(f"archivo antiguo eliminado: {archivo}")
-            else:
-                #except Exception as ex:
-                #current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
-                current_app.logger.error(f"❌ No se pudo eliminar {archivo}")
+                if os.remove(os.path.join(CARPETA_DESCARGA, archivo)):
+                    current_app.logger.info(f"archivo antiguo eliminado: {archivo}")
+                else:
+                    #except Exception as ex:
+                    #current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
+                    current_app.logger.error(f"❌ No se pudo eliminar {archivo}")
 
             current_app.logger.info(f"📂 Contenido actual2 de {CARPETA_DESCARGA}:")
             for archivo in os.listdir(CARPETA_DESCARGA):
