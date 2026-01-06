@@ -183,17 +183,16 @@ def descarga_flutterx():
         #    print(f"❌ La carpeta {carpeta} no existe.")
 
         if os.path.exists(carpeta):
-            current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
-            for archivo in os.listdir(carpeta):
-                ruta_completa = os.path.join(carpeta, archivo)
-                current_app.logger.info(f"   ➜ {ruta_completa}")
-                try:
+            try:
+                current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
+                for archivo in os.listdir(carpeta):
+                    ruta_completa = os.path.join(carpeta, archivo)
+                    current_app.logger.info(f"   ➜ {ruta_completa}")
                     os.remove(os.path.join(carpeta, archivo))
                     current_app.logger.info(f"🗑 Eliminado temporal residual: {archivo}")
-                except Exception as ex:
-                    current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
+            except Exception as ex:
+                current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
 
-        if os.path.exists(carpeta):
             current_app.logger.info(f"📂 Contenido actual2 de {carpeta}:")
             for archivo in os.listdir(carpeta):
                 current_app.logger.info(f"   ➜ {archivo}")
