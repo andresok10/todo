@@ -23,18 +23,19 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
         print("✅ Archivo Extraído")
 
-        # Listar solo carpetas dentro de ffmpeg_dir
         '''carpeta_extraida = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x))]
         print(carpeta_extraida)
-        # Obtener la carpeta más reciente según fecha de modificación
         ultima_carpeta = max(carpeta_extraida, key=lambda x: os.path.getmtime(os.path.join(ffmpeg_dir, x)))
-        print("Última carpeta creada/modificada:", ultima_carpeta)'''
+        print("Última carpeta creada/modificada:", ultima_carpeta)
 
-        #ffmpeg_path = Path(ffmpeg_dir)
-        #carpetas = [d for d in ffmpeg_path.iterdir() if d.is_dir()]
         carpetas = [x for x in Path(ffmpeg_dir).iterdir() if x.is_dir()]
         ultima_carpeta = max(carpetas, key=lambda d: d.stat().st_mtime)
-        print("Última carpeta:", ultima_carpeta.name)
+        print("Última carpeta:", ultima_carpeta.name)'''
+
+        # Usando pathlib
+        carpetas = [d for d in Path(ffmpeg_dir).iterdir() if d.is_dir() and not d.name.startswith("__")]
+        ultima_carpeta = max(carpetas, key=lambda d: d.stat().st_mtime)
+        print("Última carpeta:", ultima_carpeta.name) #Esto descarta carpetas de sistema como __pycache__
 
 
         #for x in os.listdir(ffmpeg_dir):
