@@ -12,7 +12,7 @@ is_linux = platform.system().lower().startswith("linux") # Detectar sistema oper
 print(is_linux)
 
 if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
-    print("FFmpeg no encontrado. Descargando...")
+    print("FFmpeg no encontrado... Descargando...")
     ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
     if is_linux:
         url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
@@ -21,6 +21,11 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         urllib.request.urlretrieve(url, archivo)
         tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
         print("✅ Extraído")
+
+        for x in os.listdir(ffmpeg_dir):
+            print(x)
+        for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
+            print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")
         
         if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
             os.rename(ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static", ffmpeg_dir+"/ffmpeg")
