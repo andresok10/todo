@@ -11,36 +11,38 @@ ffmpeg_dir = os.path.dirname(os.path.abspath(__file__))
 # Detectar sistema operativo
 is_linux = platform.system().lower().startswith("linux")
 print(is_linux)
-if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
+
+if is_linux and not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
     print("FFmpeg no encontrado. Descargando...")
-    ssl._create_default_https_context = lambda: ssl.create_default_context(
-        cafile=certifi.where()
-    )
-    if is_linux:
-        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-        archivo = f"{ffmpeg_dir}/ffmpeg.tar.xz"
-        urllib.request.urlretrieve(url, archivo)
-        tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
-        print("✅ Extraído")
-        old_path = os.path.join(ffmpeg_dir, "ffmpeg-7.0.2-amd64-static")
-        new_path = os.path.join(ffmpeg_dir, "ffmpeg")
-        if not os.path.exists(new_path):
-            os.rename(old_path, new_path)
-            print("✅ Carpeta renombrada a ffmpeg")
-        else:
-            print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
-
-        if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.tar.xz"):
-            os.remove(f"{ffmpeg_dir}/ffmpeg.tar.xz")
-        # if os.path.exists(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static"):
-        #    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static")
-
-        # Dar permisos de ejecución al binario
-        os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
-        # os.chmod(ffmpeg_bin, 0o755)
-        # os.chmod(ffprobe_bin, 0o755)
+    ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
+    #if is_linux:
+    url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+    archivo = f"{ffmpeg_dir}/ffmpeg.tar.xz"
+    urllib.request.urlretrieve(url, archivo)
+    tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
+    print("✅ Extraído")
+    #old_path = os.path.join(ffmpeg_dir, "ffmpeg-7.0.2-amd64-static")
+    #new_path = os.path.join(ffmpeg_dir, "ffmpeg")
+    if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
+        #os.rename(old_path, new_path)
+        os.rename(ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static", ffmpeg_dir+"/ffmpeg")
+        print("✅ Carpeta renombrada a ffmpeg")
     else:
-        raise Exception("❌ Sistema operativo no soportado")
+        print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
+
+    os.remove(archivo)
+    print(f"archivo {archivo} eliminado")
+    #if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.tar.xz"):
+    #    os.remove(f"{ffmpeg_dir}/ffmpeg.tar.xz")
+    # if os.path.exists(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static"):
+    #    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static")
+
+    # Dar permisos de ejecución al binario
+    os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
+    # os.chmod(ffmpeg_bin, 0o755)
+    # os.chmod(ffprobe_bin, 0o755)
+else:
+    raise Exception("❌ Sistema operativo no soportado")
 ##################################################
 # BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -56,7 +58,6 @@ print(FFMPEG_PATH)
 
 # carpeta = os.path.join(BASE_DIR, "descarga")
 # carpeta = "/opt/render/project/src/descarga"
-
 
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
@@ -114,14 +115,14 @@ def descarga_flutterx():
             ydl_opts = {
                 "format": "bestaudio/best",
                 # "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
-                "outtmpl": tmp_file,  # añadir extensión aquí,
+                "outtmpl": final_file,  # añadir extensión aquí,
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": False,
                 "noplaylist": True,
             }
         else:  # video
             ydl_opts = {
-                "outtmpl": tmp_file,  # añadir extensión aquí,
+                "outtmpl": final_file,  # añadir extensión aquí,
                 # "outtmpl": f"{counter}.{extension}",  # añadir extensión aquí,
                 # "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
                 # "format": "bestvideo+bestaudio/best",
