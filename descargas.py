@@ -20,7 +20,7 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         print(archivo)
         urllib.request.urlretrieve(url, archivo)
         tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
-        print("✅ Extraído")
+        print("✅ Archivo Extraído")
 
         carpeta_extraida = [x for x in os.listdir(ffmpeg_dir)]
         print(carpeta_extraida)
