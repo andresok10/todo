@@ -57,48 +57,30 @@ print(FFMPEG_PATH)
 # carpeta = os.path.join(BASE_DIR, "descarga")
 # carpeta = "/opt/render/project/src/descarga"
 
-"""if os.path.exists(CARPETA_DESCARGA):
-    current_app.logger.info(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
-    for archivo in os.listdir(CARPETA_DESCARGA):
-        ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
-        current_app.logger.info(f"   ➜ {ruta_completa}")
-                #current_app.logger.info(f"{os.remove(os.path.join(CARPETA_DESCARGA, archivo))} ok")
-            #try:
-            #    os.remove(os.path.join(CARPETA_DESCARGA, archivo))
-            #    current_app.logger.info(f"archivo antiguo eliminado: {archivo}")
-            #except Exception as ex:
-            #    current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
-                #current_app.logger.error(f"❌ No se pudo eliminar {archivo}")
-
-    current_app.logger.info(f"📂 Contenido actual2 de {CARPETA_DESCARGA}:")
-    for archivo in os.listdir(CARPETA_DESCARGA):
-        current_app.logger.info(f"   ➜ {archivo}")"""
-
-
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
-    # if os.path.exists(CARPETA_DESCARGA):
-    '''print(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
+    print(f"Contenido actual de {CARPETA_DESCARGA}:")
     for archivo in os.listdir(CARPETA_DESCARGA):
+        print(f"📂 Contenido actual de {archivo}:")
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
         print(ruta_completa)
         print("   ➜", archivo)
-        try:
-            os.remove(os.path.join(CARPETA_DESCARGA, archivo))
-            print(f"archivo eliminado {archivo}")
-        except Exception as exep:
-            print(f"no se pudo eliminar {archivo}: {exep}")'''
+        #try:
+        #    os.remove(os.path.join(CARPETA_DESCARGA, archivo))
+        #    print(f"archivo eliminado {archivo}")
+        #except Exception as exep:
+        #    print(f"no se pudo eliminar {archivo}: {exep}")
     print("#############################################")
     
     for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
         print(f"📂 Contenido actual de {f}:")
         try:
             os.remove(f)
-            #current_app.logger.info(f"archivo eliminado: {f}")
             print(f"archivo eliminado {f}")
+            #current_app.logger.info(f"archivo eliminado {f}")
         except Exception as exep:
-            #current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
             print(f"no se pudo eliminar {f}: {exep}")
+            #current_app.logger.error(f"❌ No se pudo eliminar {f}: {exep}")
 
     try:
         data = request.get_json()
