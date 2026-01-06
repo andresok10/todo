@@ -75,12 +75,18 @@ FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
 
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
-    if os.path.exists(CARPETA_DESCARGA):
-        print(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
-        for archivo in os.listdir(CARPETA_DESCARGA):
-            print("   ➜", archivo)
-    else:
-        print(f"❌ La carpeta {CARPETA_DESCARGA} no existe.")
+    #if os.path.exists(CARPETA_DESCARGA):
+    print(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
+    for archivo in os.listdir(CARPETA_DESCARGA):
+        ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
+        print(ruta_completa)
+        print("   ➜", archivo)
+        try:
+            os.remove(archivo)
+            print(f"archivo eliminado {archivo}")
+        except Exception as exep:
+            print(f"no se pudo eliminar {archivo}: {exep}")
+
     try:
         data = request.get_json()
         url = data.get("url").split("?")[0]
