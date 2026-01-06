@@ -21,18 +21,19 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         print(archivo)
         urllib.request.urlretrieve(url, archivo)
         #tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
-        print("✅ Archivo Extraído")
+        #print("✅ Archivo Extraído")
 
         with tarfile.open(archivo, "r:xz") as tar:
             nombres = [m.name for m in tar.getmembers() if m.isdir()]
             print("Carpetas dentro del tar:", nombres)
             tar.extractall(ffmpeg_dir, filter="data")
             print("✅ Archivo Extraído")
+        carpeta_extraida  = "ffmpeg-7.0.2-amd64-static"
 
-        '''carpeta_extraida = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x))]
-        print(carpeta_extraida)
-        ultima_carpeta = max(carpeta_extraida, key=lambda x: os.path.getmtime(os.path.join(ffmpeg_dir, x)))
-        print("Última carpeta creada/modificada:", ultima_carpeta)'''
+        carpeta_extraidax = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x)) and not d.name.startswith(("__", "."))]
+        print(carpeta_extraidax)
+        ultima_carpeta = max(carpeta_extraidax, key=lambda x: os.path.getmtime(os.path.join(ffmpeg_dir, x)))
+        print("Última carpeta creada/modificada:", ultima_carpeta)
 
         carpetas = [d for d in Path(ffmpeg_dir).iterdir() if d.is_dir() and not d.name.startswith(("__", "."))]
         ultima_carpeta = max(carpetas, key=lambda d: d.stat().st_mtime)
@@ -40,13 +41,14 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
 
         for x in os.listdir(ffmpeg_dir):
             print(x)
-        carpeta_extraida = [x for x in os.listdir(ffmpeg_dir)][-3]
-        print(carpeta_extraida) #como obtener el ultimo dato de la lista
+        carpeta_extraidaz = [x for x in os.listdir(ffmpeg_dir)][-3]
+        print(carpeta_extraidaz) #como obtener el ultimo dato de la lista
         #for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
         #    print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")
         
         if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
-            os.rename(ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static", ffmpeg_dir+"/ffmpeg")
+            #os.rename(ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static", ffmpeg_dir+"/ffmpeg")
+            os.rename(ffmpeg_dir+"/"+carpeta_extraida, ffmpeg_dir+"/ffmpeg")
             print("✅ Carpeta renombrada a ffmpeg")
         else:
             print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
