@@ -51,6 +51,8 @@ print(FFMPEG_PATH) #/opt/render/project/src/ffmpeg/ffmpeg
 ####
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
+    carpeta = os.path.join(BASE_DIR, "descarga")
+    #carpeta = "/opt/render/project/src/descarga"
     try:
         data = request.get_json()
         url = data.get("url").split("?")[0]
@@ -131,7 +133,7 @@ def descarga_flutterx():
 
     finally:
         # 🔁 Esto se ejecuta siempre, haya error o no
-        carpeta = os.path.join(BASE_DIR, "descarga")
+        #carpeta = os.path.join(BASE_DIR, "descarga")
         if os.path.exists(carpeta):
             print(f"📂 Contenido actual de: {carpeta}")
             for nombre in os.listdir(carpeta):
@@ -141,14 +143,13 @@ def descarga_flutterx():
         else:
             print(f"❌ La carpeta {carpeta} no existe.")
         ########################################################
-        #import os
-        carpetax = "/opt/render/project/src/descarga"
-        if os.path.exists(carpetax):
-            print(f"📂 Contenido de {carpetax}:")
-            for archivo in os.listdir(carpetax):
+        #carpetax = "/opt/render/project/src/descarga"
+        if os.path.exists(carpeta):
+            print(f"📂 Contenido de {carpeta}:")
+            for archivo in os.listdir(carpeta):
                 print("   ➜", archivo)
         else:
-            print(f"❌ La carpeta {carpetax} no existe.")
+            print(f"❌ La carpeta {carpeta} no existe.")
 
 # ✅ Servir correctamente los archivos desde /downloads/
 @app2.route("/descargax/<path:file>")
