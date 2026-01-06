@@ -59,12 +59,11 @@ print(FFMPEG_PATH)
 
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
-    print(f"Contenido actual de {CARPETA_DESCARGA}:")
     for archivo in os.listdir(CARPETA_DESCARGA):
         print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
         print(ruta_completa)
-        print("   ➜", archivo,+",", end=" ")
+        print("   ➜", archivo, end=" ")
         #try:
         #    os.remove(os.path.join(CARPETA_DESCARGA, archivo))
         #    print(f"archivo eliminado {archivo}")
