@@ -155,8 +155,10 @@ def descarga_flutterx():
             current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
             for archivo in os.listdir(carpeta):
                 current_app.logger.info(f"   ➜ {archivo}")
-        else:
-            current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
+                os.remove(archivo)
+                current_app.logger.info(f"   ➜ {archivo}")
+        #else:
+        #    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
 
 # Servir correctamente los archivos desde /downloads/
 @app2.route("/descargax/<path:file>")
