@@ -189,9 +189,9 @@ def descarga_flutterx():
                 try:
                     #os.remove(f)
                     os.remove(os.path.join(carpeta, archivo))
-                    current_app.logger.info(f"🗑 Eliminado temporal residual: {f}")
+                    current_app.logger.info(f"🗑 Eliminado temporal residual: {archivo}")
                 except Exception as ex:
-                    current_app.logger.error(f"❌ No se pudo eliminar {f}: {ex}")
+                    current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
 
         if os.path.exists(carpeta):
             current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
