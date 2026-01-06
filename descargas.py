@@ -73,9 +73,9 @@ FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
     for archivo in os.listdir(CARPETA_DESCARGA):
         current_app.logger.info(f"   ➜ {archivo}")"""
 
-if os.path.exists(carpeta):
-    print(f"📂 Contenido actual de {carpeta}:")
-    for archivo in os.listdir(carpeta):
+if os.path.exists(CARPETA_DESCARGA):
+    print(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
+    for archivo in os.listdir(CARPETA_DESCARGA):
         print("   ➜", archivo)
 else:
     print(f"❌ La carpeta {carpeta} no existe.")
