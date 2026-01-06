@@ -38,8 +38,8 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         print("Última carpeta:", ultima_carpeta.name) #Esto descarta carpetas de sistema como __pycache__
 
 
-        #for x in os.listdir(ffmpeg_dir):
-        #    print(x)
+        for x in os.listdir(ffmpeg_dir):
+            print(x)
         carpeta_extraida = [x for x in os.listdir(ffmpeg_dir)][-3]
         print(carpeta_extraida) #como obtener el ultimo dato de la lista
         #for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
