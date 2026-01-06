@@ -42,8 +42,79 @@ if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
     else:
         raise Exception("❌ Sistema operativo no soportado")
 ##################################################
-# BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
+app2 = Blueprint("descargas", __name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
+os.makedirs(CARPETA_DESCARGA, exist_ok=True)
+
+FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
+
+@app2.route("/descarga_flutter", methods=["POST"])
+def descarga_flutterx():
+    try:
+        data = request.get_json()
+        url = data.get("url").split("?")[0]
+        download_type = data.get("download_type", "video")
+        extension = "m4a" if download_type == "audio" else "webm"
+
+        if not url:
+            return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
+
+        # 🔥 Limpiar carpeta antes de descargar
+        for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
+            try:
+                os.remove(f)
+                current_app.logger.info(f"🗑 Eliminado archivo previo: {f}")
+            except Exception as ex:
+                current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
+
+        # Archivo final siempre será "1.extension"
+        final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
+
+        # Opciones de yt-dlp
+        ydl_opts = {
+            "outtmpl": final_file,
+            "ffmpeg_location": FFMPEG_PATH,
+            "noplaylist": True,
+            "quiet": False,
+        }
+        if download_type == "audio":
+            ydl_opts["format"] = "bestaudio/best"
+        else:
+            ydl_opts["format"] = "bestvideo[ext=webm]+bestaudio[ext=webm]/best"
+            ydl_opts["merge_output_format"] = extension
+            ydl_opts["postprocessor_args"] = ["-strict", "-2"]
+
+        # Descargar
+        with YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+
+        # URL de descarga
+        download_url = url_for(
+            "descargas.serve_download",
+            file=os.path.basename(final_file),
+            _external=True,
+            _scheme="https"
+        )
+
+        return jsonify({
+            "status": "success",
+            "msg": f"{download_type.capitalize()} descargado con éxito como 1.{extension}.",
+            "download_url": download_url,
+            "extension": extension
+        })
+
+    except Exception as e:
+        current_app.logger.error(f"Error en descarga: {e}")
+        return jsonify({"status": "error", "msg": str(e)}), 500
+
+
+@app2.route("/descargax/<path:file>")
+def serve_download(file):
+    return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
+
+# BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
+'''BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 print(BASE_DIR)  # /opt/render/project/src/
 os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
 
@@ -51,8 +122,6 @@ os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
 FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/ffmpeg"  # linux
 print(FFMPEG_PATH)  # /opt/render/project/src/ffmpeg/ffmpeg
 
-
-####
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
     carpeta = os.path.join(BASE_DIR, "descarga")
@@ -160,9 +229,9 @@ def descarga_flutterx():
                 {"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}
             ),
             500,
-        )
+        )'''
 
-    '''finally:
+'''finally:
         if os.path.exists(carpeta):
             try:
                 current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
@@ -180,7 +249,7 @@ def descarga_flutterx():
         # else:
         #    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
 
-@app2.route("/descargax/<path:file>")
+'''@app2.route("/descargax/<path:file>")
 def serve_download(file):
     # Ruta completa al archivo temporal
     full_path = os.path.join(BASE_DIR, "descarga", file)
@@ -195,7 +264,7 @@ def serve_download(file):
         current_app.logger.info(f"🗑 Archivo eliminado automáticamente: {full_path}")
     except Exception as e:
         current_app.logger.error(f"❌ Error eliminando archivo: {full_path} | {e}")
-    return response
+    return response'''
 
 # Servir correctamente los archivos desde /downloads/
 #@app2.route("/descargax/<path:file>")
