@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, url_for, send_from_directory, cur
 from yt_dlp import YoutubeDL  # pip install yt-dlp
 import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil
 import os, zipfile, tarfile, urllib.request, shutil, ssl, certifi, platform
+import glob
 
 app2 = Blueprint("descargas", __name__)
 
@@ -67,28 +68,22 @@ def descarga_flutterx():
 
         extension = "m4a" if download_type == "audio" else "webm"
 
-        # Generar nombre único
-        counter = 1
-        while True:
-            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
-            # file = f"{BASE_DIR}/descarga/{counter}"
-            if not os.path.exists(file):
-                break
-            counter += 1
-
+        # Archivo temporal para descargar con yt-dlp
+        tmp_file = os.path.join(carpeta, f"temp.%(ext)s")  # siempre fijo, evita conflictos
+        
         # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
             ydl_opts = {
                 "format": "bestaudio/best",
                 # "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
-                "outtmpl": file,  # añadir extensión aquí,
+                "outtmpl": tmp_file,  # añadir extensión aquí,
                 "ffmpeg_location": FFMPEG_PATH,
                 "quiet": False,
                 "noplaylist": True,
             }
         else:  # video
             ydl_opts = {
-                "outtmpl": file,  # añadir extensión aquí,
+                "outtmpl": tmp_file,  # añadir extensión aquí,
                 # "outtmpl": f"{counter}.{extension}",  # añadir extensión aquí,
                 # "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
                 # "format": "bestvideo+bestaudio/best",
@@ -106,6 +101,20 @@ def descarga_flutterx():
         # Descargar archivo
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
+
+        # Generar nombre único
+        counter = 1
+        while True:
+            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            # file = f"{BASE_DIR}/descarga/{counter}"
+            if not os.path.exists(file):
+                break
+            counter += 1
+
+        # Renombrar temporal a archivo final con contador
+        for f in glob.glob(os.path.join(carpeta, "temp.*")):
+            #os.rename(f, final_file)
+            os.rename(f, file)
 
         # Después de descargar con yt_dlp  # Generar respuesta
         file_basename = os.path.basename(file)  # ej: 1.webm, 2.m4a, etc.
@@ -171,7 +180,7 @@ def descarga_flutterx():
             for archivo in os.listdir(carpeta):
                 current_app.logger.info(f"   ➜ {archivo}")
                 #os.remove(archivo)
-            os.remove(os.path.join(carpeta, archivo))
+                os.remove(os.path.join(carpeta, archivo))
             for archivo in os.listdir(carpeta):
                 current_app.logger.info(f"   ➜ {archivo}")
         # else:
