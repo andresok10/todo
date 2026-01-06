@@ -26,17 +26,12 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         '''carpeta_extraida = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x))]
         print(carpeta_extraida)
         ultima_carpeta = max(carpeta_extraida, key=lambda x: os.path.getmtime(os.path.join(ffmpeg_dir, x)))
-        print("Última carpeta creada/modificada:", ultima_carpeta)
+        print("Última carpeta creada/modificada:", ultima_carpeta)'''
 
-        carpetas = [x for x in Path(ffmpeg_dir).iterdir() if x.is_dir()]
-        ultima_carpeta = max(carpetas, key=lambda d: d.stat().st_mtime)
-        print("Última carpeta:", ultima_carpeta.name)'''
-
-        # Usando pathlib
-        carpetas = [d for d in Path(ffmpeg_dir).iterdir() if d.is_dir() and not d.name.startswith("__") and not d.name.startswith(".")]
+        #carpetas = [d for d in Path(ffmpeg_dir).iterdir() if d.is_dir() and not d.name.startswith("__") and not d.name.startswith(".")]
+        carpetas = [d for d in Path(ffmpeg_dir).iterdir() if d.is_dir() and not d.name.startswith("__",".")]
         ultima_carpeta = max(carpetas, key=lambda d: d.stat().st_mtime)
         print("Última carpeta:", ultima_carpeta.name) #Esto descarta carpetas de sistema como __pycache__
-
 
         for x in os.listdir(ffmpeg_dir):
             print(x)
