@@ -72,7 +72,7 @@ def descarga_flutterx():
             for archivo in os.listdir(CARPETA_DESCARGA):
                 ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
                 current_app.logger.info(f"   ➜ {ruta_completa}")
-                current_app.logger.info(f"{os.remove(os.path.join(CARPETA_DESCARGA, archivo))}")
+                current_app.logger.info(f"{os.remove(os.path.join(CARPETA_DESCARGA, archivo))} ok")
                 #try:
                 #if os.remove(os.path.join(CARPETA_DESCARGA, archivo)):
                 #    current_app.logger.info(f"archivo antiguo eliminado: {archivo}")
