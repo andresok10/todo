@@ -20,17 +20,14 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         archivo = ffmpeg_dir+"/ffmpeg.tar.xz"
         print(archivo)
         urllib.request.urlretrieve(url, archivo)
-        #tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
-        #print("✅ Archivo Extraído")
-
-        with tarfile.open(archivo, "r:xz") as tar:
+        with tarfile.open(archivo, "r:xz") as tar: ##tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
             nombres = [m.name for m in tar.getmembers() if m.isdir()]
             print("Carpetas dentro del tar:", nombres)
             tar.extractall(ffmpeg_dir, filter="data")
             print("✅ Archivo Extraído")
         carpeta_extraida  = "ffmpeg-7.0.2-amd64-static"
 
-        carpeta_extraidax = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x)) and not d.name.startswith(("__", "."))]
+        carpeta_extraidax = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x)) and not x.startswith(("__", "."))]
         print(carpeta_extraidax)
         ultima_carpeta = max(carpeta_extraidax, key=lambda x: os.path.getmtime(os.path.join(ffmpeg_dir, x)))
         print("Última carpeta creada/modificada:", ultima_carpeta)
