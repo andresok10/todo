@@ -44,10 +44,8 @@ if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
 ##################################################
 # BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
-#os.makedirs(CARPETA_DESCARGA, exist_ok=True)
-
-CARPETA_DESCARGA = os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
+CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
+os.makedirs(CARPETA_DESCARGA, exist_ok=True)
 
 # FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
 FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
@@ -58,14 +56,6 @@ print(FFMPEG_PATH)
 
 # carpeta = os.path.join(BASE_DIR, "descarga")
 # carpeta = "/opt/render/project/src/descarga"
-
-# Limpiar carpeta antes de descargar
-# for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
-#    try:
-#        os.remove(f)
-#        current_app.logger.info(f"🗑 Eliminado archivo previo: {f}")
-#    except Exception as ex:
-#        current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
 
 """if os.path.exists(CARPETA_DESCARGA):
     current_app.logger.info(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
@@ -84,24 +74,35 @@ print(FFMPEG_PATH)
     for archivo in os.listdir(CARPETA_DESCARGA):
         current_app.logger.info(f"   ➜ {archivo}")"""
 
+
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
-    #if os.path.exists(CARPETA_DESCARGA):
-    print(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
+    # if os.path.exists(CARPETA_DESCARGA):
+    '''print(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
     for archivo in os.listdir(CARPETA_DESCARGA):
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
         print(ruta_completa)
         print("   ➜", archivo)
         try:
-            os.remove(os.path.join(CARPETA_DESCARGA,archivo))
+            os.remove(os.path.join(CARPETA_DESCARGA, archivo))
             print(f"archivo eliminado {archivo}")
         except Exception as exep:
-            print(f"no se pudo eliminar {archivo}: {exep}")
+            print(f"no se pudo eliminar {archivo}: {exep}")'''
+    print("#############################################")
+    
+    for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
+        print(f"📂 Contenido actual de {f}:")
+        try:
+            os.remove(f)
+            current_app.logger.info(f"archivo eliminado: {f}")
+        except Exception as ex:
+            current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
 
     try:
         data = request.get_json()
         url = data.get("url").split("?")[0]
         download_type = data.get("download_type", "video")
+        # extension = data.get("extension", "webm")  # ej: mp4, mkv, webm, avi, mp3...
         extension = "m4a" if download_type == "audio" else "webm"
 
         if not url:
@@ -110,6 +111,19 @@ def descarga_flutterx():
         # Archivo final siempre será "1.extension"
         final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
 
+        '''
+        # Archivo temporal para descargar con yt-dlp
+        tmp_file = os.path.join(carpeta, f"temp.%(ext)s")  # siempre fijo, evita conflictos
+
+        # Generar nombre único
+        counter = 1
+        while True:
+            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            # file = f"{BASE_DIR}/descarga/{counter}"
+            if not os.path.exists(file):
+                break
+            counter += 1
+        '''
         # Opciones de yt-dlp
         ydl_opts = {
             "outtmpl": final_file,
@@ -155,42 +169,7 @@ def serve_download(file):
     return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
 
 
-# BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
-"""BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-print(BASE_DIR)  # /opt/render/project/src/
-os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
-
-# FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
-FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/ffmpeg"  # linux
-print(FFMPEG_PATH)  # /opt/render/project/src/ffmpeg/ffmpeg
-
-@app2.route("/descarga_flutter", methods=["POST"])
-def descarga_flutterx():
-    carpeta = os.path.join(BASE_DIR, "descarga")
-    # carpeta = "/opt/render/project/src/descarga"
-    try:
-        data = request.get_json()
-        url = data.get("url").split("?")[0]
-        download_type = data.get("download_type", "video")
-        extension = data.get("extension", "webm")  # ej: mp4, mkv, webm, avi, mp3...
-
-        if not url:
-            return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
-
-        extension = "m4a" if download_type == "audio" else "webm"
-
-        # Archivo temporal para descargar con yt-dlp
-        tmp_file = os.path.join(carpeta, f"temp.%(ext)s")  # siempre fijo, evita conflictos
-
-        # Generar nombre único
-        counter = 1
-        while True:
-            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
-            # file = f"{BASE_DIR}/descarga/{counter}"
-            if not os.path.exists(file):
-                break
-            counter += 1
-        
+"""
         # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
             ydl_opts = {
@@ -218,9 +197,6 @@ def descarga_flutterx():
                 #'postprocessor_args': ['-c', 'copy', '-strict', '-2']
             }
 
-        # Descargar archivo
-        with YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
 
         # Renombrar temporal a archivo final con contador
         #for f in glob.glob(os.path.join(carpeta, "temp.*")):
@@ -273,40 +249,8 @@ def descarga_flutterx():
             500,
         )"""
 
-"""finally:
-        if os.path.exists(carpeta):
-            try:
-                current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
-                for archivo in os.listdir(carpeta):
-                    ruta_completa = os.path.join(carpeta, archivo)
-                    current_app.logger.info(f"   ➜ {ruta_completa}")
-                    os.remove(os.path.join(carpeta, archivo))
-                    current_app.logger.info(f"🗑 Eliminado temporal residual: {archivo}")
-            except Exception as ex:
-                current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
-
-            current_app.logger.info(f"📂 Contenido actual2 de {carpeta}:")
-            for archivo in os.listdir(carpeta):
-                current_app.logger.info(f"   ➜ {archivo}")"""
 # else:
 #    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
-
-"""@app2.route("/descargax/<path:file>")
-def serve_download(file):
-    # Ruta completa al archivo temporal
-    full_path = os.path.join(BASE_DIR, "descarga", file)
-    if not os.path.exists(full_path):
-        return "Archivo no encontrado", 404
-    # Usamos send_file y luego eliminamos el archivo
-    #response = send_file(full_path, as_attachment=True)
-    response =  send_from_directory(full_path, as_attachment=True)
-    # Borrar el archivo después de servirlo
-    try:
-        os.remove(full_path)
-        current_app.logger.info(f"🗑 Archivo eliminado automáticamente: {full_path}")
-    except Exception as e:
-        current_app.logger.error(f"❌ Error eliminando archivo: {full_path} | {e}")
-    return response"""
 
 # Servir correctamente los archivos desde /downloads/
 # @app2.route("/descargax/<path:file>")
