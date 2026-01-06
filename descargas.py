@@ -188,8 +188,10 @@ def descarga_flutterx():
                 current_app.logger.info(f"   ➜ {archivo}")
 
         # Limpiar temporales residuales, pero nunca los finales
-        temp_files = glob.glob(os.path.join(carpeta, "temp.*"))
-        for f in temp_files:
+        #temp_files = glob.glob(os.path.join(carpeta, "temp.*"))
+        #temp_files = glob.glob(os.path.join(carpeta, "temp.*"))
+        #for f in temp_files:
+        for f in os.listdir(carpeta):
             try:
                 os.remove(f)
                 current_app.logger.info(f"🗑 Eliminado temporal residual: {f}")
