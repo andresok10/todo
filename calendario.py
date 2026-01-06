@@ -1,98 +1,86 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template
+from flask_wtf import FlaskForm
+from wtforms import StringField, DecimalField
+from wtforms.validators import DataRequired
+import pendulum
+from babel.dates import get_month_names
 import calendar
-from datetime import datetime
+from zodiac_sign import get_zodiac_sign   # pip install zodiac-sign
 
 app1 = Blueprint("calendario", __name__)
 
-signos = [
-    ("Capricornio", (12, 22), (1, 19)),
-    ("Acuario", (1, 20), (2, 18)),
-    ("Piscis", (2, 19), (3, 20)),
-    ("Aries", (3, 21), (4, 19)),
-    ("Tauro", (4, 20), (5, 20)),
-    ("Géminis", (5, 21), (6, 20)),
-    ("Cáncer", (6, 21), (7, 22)),
-    ("Leo", (7, 23), (8, 22)),
-    ("Virgo", (8, 23), (9, 22)),
-    ("Libra", (9, 23), (10, 22)),
-    ("Escorpio", (10, 23), (11, 21)),
-    ("Sagitario", (11, 22), (12, 21)),
-]
+class FormEdad(FlaskForm):
+    fecha = StringField("fecha", validators=[DataRequired()])
 
-@app1.route("/", methods=["GET", "POST"])
-@app1.route("/calen", methods=["GET", "POST"])
+class FormDescuento(FlaskForm):
+    monto = DecimalField("monto", validators=[DataRequired()])
+    porc = DecimalField("porc", validators=[DataRequired()])
+
+@app1.route("/", methods=["GET","POST"])
 def calendario():
-    msg = ""
-    hoy = datetime.today()
-    meses = [
-        {
-            "nombre": calendar.month_name[m],
-            "mes_numero": m,
-            "semanas": calendar.Calendar().monthdayscalendar(hoy.year, m),
-        }
-        for m in range(hoy.month, 13)
-    ]
-    #print(meses)
+    f1 = FormEdad()
+    f2 = FormDescuento()
 
-    edad = ""
-    fn = ""
-    signo = ""
-    cumple = ""
+    hoy = pendulum.today()
+
+    # nombres de meses en español
+    try:
+        nombres = get_month_names('wide', locale='es_ES')
+    except Exception:
+        nombres = get_month_names('wide', locale='es')
+
+    meses = [{
+        "nombre": nombres[m],
+        "mes_numero": m,
+        "semanas": calendar.Calendar().monthdayscalendar(hoy.year, m)
+    } for m in range(hoy.month, 13)]
+
+    # variables por defecto
+    edad = signo = cumple = fn = ""
     faltan = None
     descuento = None
+    msg = ""
 
-    if request.method == "POST":
+    # ===== FORMULARIO 1: edad + signo =====
+    if f1.validate_on_submit() and f1.fecha.data:
         try:
-            fnx = datetime.strptime(request.form.get("fecha_nacimiento", ""), "%d/%m/%Y")
-            edad = hoy.year - fnx.year - ((hoy.month, hoy.day) < (fnx.month, fnx.day))
-            cumplex = fnx.replace(year=hoy.year)
-            print(cumplex)
-            ###########
-            if cumplex < hoy:
-                cumplex = cumplex.replace(year=hoy.year + 1)
-            ###########
-            faltan = (cumplex - hoy).days
-            ###########
-            #signo = next(s for s, (m1, d1), (m2, d2) in signos
-            #    if (fnx.month == m1 and fnx.day >= d1) or (fnx.month == m2 and fnx.day <= d2)
-            #)
-            
-            for s, (m1, d1), (m2, d2) in signos:
-                if (fnx.month == m1 and fnx.day >= d1) or (fnx.month == m2 and fnx.day <= d2):
-                    signo = s
-                    break
-            ###########
-            # aquí conviertes a string formateado
-            fn = fnx.strftime("%d/%m/%Y")
-            cumple = cumplex.strftime("%d/%m/%Y")
-            print(cumple)
-        except:
-            #edad = "Ingrese fecha correcta: dia/mes/año"
-            msg = ""
-        ###############################################################
-        try:
-            monto = float(request.form.get("monto", 0))
-            porcentaje = float(request.form.get("porcentaje", 0))
-            descuento = monto - (monto * porcentaje / 100)
-        except:
-            #descuento = "Error en los datos ingresados"
-            msg = ""
-    
-    # recoger mensajes de la descarga si existen
-    msg = request.args.get("msg", "")
-    msg_type = request.args.get("msg_type", "")
-    download_url = request.args.get("download_url", "") # download_url=download_url,
+            n = pendulum.from_format(f1.fecha.data.strip(), "DD/MM/YYYY")
 
-    return render_template("app.html",
-        msg=msg,
-        msg_type=msg_type,
-        download_url=download_url,
+            edad = hoy.diff(n).in_years()
+
+            cumple_d = n.replace(year=hoy.year)
+            if cumple_d < hoy:
+                cumple_d = cumple_d.add(years=1)
+
+            faltan = hoy.diff(cumple_d).in_days()
+
+            # ---------- SIGNO ZODIACAL CON LIBRERÍA ----------
+            signo = get_zodiac_sign(n.day, n.month)
+
+            fn = n.format("DD/MM/YYYY")
+            cumple = cumple_d.format("DD/MM/YYYY")
+
+        except Exception:
+            msg = "Datos inválidos. Formato correcto: dd/mm/aaaa"
+
+    # ===== FORMULARIO 2: descuento =====
+    if f2.validate_on_submit() and f2.monto.data and f2.porc.data:
+        try:
+            descuento = float(f2.monto.data) * (1 - float(f2.porc.data) / 100)
+        except Exception:
+            msg = "Error en cálculo de descuento"
+
+    return render_template(
+        "app.html",
         hoy=hoy,
         meses=meses,
         edad=edad,
-        fn=fn,
         signo=signo,
+        fn=fn,
         cumple=cumple,
         faltan=faltan,
         descuento=descuento,
+        msg=msg,
+        f1=f1,
+        f2=f2
     )
