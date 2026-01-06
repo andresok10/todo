@@ -187,7 +187,8 @@ def serve_download(file):
     if not os.path.exists(full_path):
         return "Archivo no encontrado", 404
     # Usamos send_file y luego eliminamos el archivo
-    response = send_file(full_path, as_attachment=True)
+    #response = send_file(full_path, as_attachment=True)
+    response =  send_from_directory(full_path, as_attachment=True)
     # Borrar el archivo después de servirlo
     try:
         os.remove(full_path)
