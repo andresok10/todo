@@ -51,7 +51,7 @@ print(FFMPEG_PATH) #/opt/render/project/src/ffmpeg/ffmpeg
 ####
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
-    #carpeta = os.path.join(BASE_DIR, "descarga")
+    carpeta = os.path.join(BASE_DIR, "descarga")
     #carpeta = "/opt/render/project/src/descarga"
     try:
         data = request.get_json()
@@ -132,7 +132,7 @@ def descarga_flutterx():
         return jsonify({"status": "error","msg": f"Error al descargar el archivo: {str(e)}"}), 500
 
     finally:
-        # 🔁 Esto se ejecuta siempre, haya error o no
+        # Esto se ejecuta siempre, haya error o no
         #carpeta = os.path.join(BASE_DIR, "descarga")
         #if os.path.exists(carpeta):
         #    print(f"📂 Contenido actual de: {carpeta}")
@@ -143,15 +143,22 @@ def descarga_flutterx():
         #else:
         #    print(f"❌ La carpeta {carpeta} no existe.")
         ########################################################
-        carpeta = "/opt/render/project/src/descarga"
-        if os.path.exists(carpeta):
-            print(f"📂 Contenido de {carpeta}:")
-            for archivo in os.listdir(carpeta):
-                print("   ➜", archivo)
-        else:
-            print(f"❌ La carpeta {carpeta} no existe.")
+        #carpeta = "/opt/render/project/src/descarga"
+        #if os.path.exists(carpeta):
+        #    print(f"📂 Contenido de {carpeta}:")
+        #    for archivo in os.listdir(carpeta):
+        #        print("   ➜", archivo)
+        #else:
+        #    print(f"❌ La carpeta {carpeta} no existe.")
 
-# ✅ Servir correctamente los archivos desde /downloads/
+        if os.path.exists(carpeta):
+            current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
+            for archivo in os.listdir(carpeta):
+                current_app.logger.info(f"   ➜ {archivo}")
+        else:
+            current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
+
+# Servir correctamente los archivos desde /downloads/
 @app2.route("/descargax/<path:file>")
 def serve_download(file):
     #Sirve los archivos descargados directamente
