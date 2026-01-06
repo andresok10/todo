@@ -44,8 +44,9 @@ if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
 ##################################################
 # BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
-os.makedirs(CARPETA_DESCARGA, exist_ok=True)
+#CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
+#os.makedirs(CARPETA_DESCARGA, exist_ok=True)
+CARPETA_DESCARGA = os.path.join(BASE_DIR,os.makedirs("descarga", exist_ok=True))
 
 # FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
 FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
