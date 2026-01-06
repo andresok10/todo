@@ -166,17 +166,18 @@ def descarga_flutterx():
         # else:
         #    print(f"❌ La carpeta {carpeta} no existe.")
 
-        #if os.path.exists(carpeta):
-        #    current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
-        #    for archivo in os.listdir(carpeta):
-        #        current_app.logger.info(f"   ➜ {archivo}")
-                # os.remove(archivo)
-        #        os.remove(os.path.join(carpeta, archivo))
-        #        current_app.logger.info(f"   ➜ {archivo}")
+        if os.path.exists(carpeta):
+            current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
+            for archivo in os.listdir(carpeta):
+                current_app.logger.info(f"   ➜ {archivo}")
+                #os.remove(archivo)
+            os.remove(os.path.join(carpeta, archivo))
+            for archivo in os.listdir(carpeta):
+                current_app.logger.info(f"   ➜ {archivo}")
         # else:
         #    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
-        
-        if os.path.exists(carpeta):
+
+        '''if os.path.exists(carpeta):
             archivos = os.listdir(carpeta)
             if archivos:
                 current_app.logger.info(
@@ -194,7 +195,7 @@ def descarga_flutterx():
             else:
                 current_app.logger.info(f"📂 La carpeta {carpeta} está vacía.")
         else:
-            current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
+            current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")'''
 
 
 # Servir correctamente los archivos desde /downloads/
