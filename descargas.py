@@ -155,7 +155,8 @@ def descarga_flutterx():
             current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
             for archivo in os.listdir(carpeta):
                 current_app.logger.info(f"   ➜ {archivo}")
-                os.remove(archivo)
+                #os.remove(archivo)
+                os.remove(os.path.join(carpeta, archivo))
                 current_app.logger.info(f"   ➜ {archivo}")
         #else:
         #    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
