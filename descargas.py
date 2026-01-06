@@ -48,21 +48,19 @@ os.makedirs(CARPETA_DESCARGA, exist_ok=True)
 
 FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
 
-@app2.route("/descarga_flutter", methods=["POST"])
-def descarga_flutterx():
-    # 🔥 Limpiar carpeta antes de descargar
-        #for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
+#Limpiar carpeta antes de descargar
+#for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
         #    try:
         #        os.remove(f)
         #        current_app.logger.info(f"🗑 Eliminado archivo previo: {f}")
         #    except Exception as ex:
         #        current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
 
-    if os.path.exists(CARPETA_DESCARGA):
-        current_app.logger.info(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
-        for archivo in os.listdir(CARPETA_DESCARGA):
-            ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
-            current_app.logger.info(f"   ➜ {ruta_completa}")
+if os.path.exists(CARPETA_DESCARGA):
+    current_app.logger.info(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
+    for archivo in os.listdir(CARPETA_DESCARGA):
+        ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
+        current_app.logger.info(f"   ➜ {ruta_completa}")
                 #current_app.logger.info(f"{os.remove(os.path.join(CARPETA_DESCARGA, archivo))} ok")
             #try:
             #    os.remove(os.path.join(CARPETA_DESCARGA, archivo))
@@ -71,10 +69,12 @@ def descarga_flutterx():
             #    current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
                 #current_app.logger.error(f"❌ No se pudo eliminar {archivo}")
 
-        current_app.logger.info(f"📂 Contenido actual2 de {CARPETA_DESCARGA}:")
-        for archivo in os.listdir(CARPETA_DESCARGA):
-            current_app.logger.info(f"   ➜ {archivo}")
+    current_app.logger.info(f"📂 Contenido actual2 de {CARPETA_DESCARGA}:")
+    for archivo in os.listdir(CARPETA_DESCARGA):
+        current_app.logger.info(f"   ➜ {archivo}")
 
+@app2.route("/descarga_flutter", methods=["POST"])
+def descarga_flutterx():
     try:
         data = request.get_json()
         url = data.get("url").split("?")[0]
