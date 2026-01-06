@@ -94,9 +94,11 @@ def descarga_flutterx():
         print(f"📂 Contenido actual de {f}:")
         try:
             os.remove(f)
-            current_app.logger.info(f"archivo eliminado: {f}")
-        except Exception as ex:
-            current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
+            #current_app.logger.info(f"archivo eliminado: {f}")
+            print(f"archivo eliminado {f}")
+        except Exception as exep:
+            #current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
+            print(f"no se pudo eliminar {f}: {exep}")
 
     try:
         data = request.get_json()
