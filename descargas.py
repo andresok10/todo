@@ -82,7 +82,8 @@ def descarga_flutterx():
         print(ruta_completa)
         print("   ➜", archivo)
         try:
-            os.remove(archivo)
+            #os.remove(CARPETA_DESCARGA"/"archivo)
+            os.remove(os.path.join(CARPETA_DESCARGA,archivo))
             print(f"archivo eliminado {archivo}")
         except Exception as exep:
             print(f"no se pudo eliminar {archivo}: {exep}")
