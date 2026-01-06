@@ -41,12 +41,12 @@ if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
 ##################################################
 #BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-print(BASE_DIR)
+print(BASE_DIR) #/opt/render/project/src/
 os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
 
 #FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
 FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/ffmpeg" # linux
-print(FFMPEG_PATH) #/opt/render/project/src/ffmpeg
+print(FFMPEG_PATH) #/opt/render/project/src/ffmpeg/ffmpeg
 
 ####
 @app2.route("/descarga_flutter", methods=["POST"])
@@ -140,6 +140,15 @@ def descarga_flutterx():
                 print("   ➜", nombre)
         else:
             print(f"❌ La carpeta {carpeta} no existe.")
+
+#import os
+carpeta = "/opt/render/project/src/descarga"
+if os.path.exists(carpeta):
+    print(f"📂 Contenido de {carpeta}:")
+    for archivo in os.listdir(carpeta):
+        print("   ➜", archivo)
+else:
+    print(f"❌ La carpeta {carpeta} no existe.")
 
 # ✅ Servir correctamente los archivos desde /downloads/
 @app2.route("/descargax/<path:file>")
