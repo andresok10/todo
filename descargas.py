@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, url_for, send_from_directory, current_app
 from yt_dlp import YoutubeDL  # pip install yt-dlp
-import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil
-import os, zipfile, tarfile, urllib.request, shutil, ssl, certifi, platform
+import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform
 import glob
 
 app2 = Blueprint("descargas", __name__)
@@ -9,40 +8,38 @@ app2 = Blueprint("descargas", __name__)
 ffmpeg_dir = os.path.dirname(os.path.abspath(__file__))
 print(ffmpeg_dir)
 
-# Detectar sistema operativo
-is_linux = platform.system().lower().startswith("linux")
+is_linux = platform.system().lower().startswith("linux") # Detectar sistema operativo
 print(is_linux)
 
-if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
+if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
     print("FFmpeg no encontrado. Descargando...")
     ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
     if is_linux:
         url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-        archivo = f"{ffmpeg_dir}/ffmpeg.tar.xz"
+        archivo = ffmpeg_dir+"/ffmpeg.tar.xz"
         print(archivo)
         urllib.request.urlretrieve(url, archivo)
         tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
         print("✅ Extraído")
-        #old_path = os.path.join(ffmpeg_dir, "ffmpeg-7.0.2-amd64-static")
-        #new_path = os.path.join(ffmpeg_dir, "ffmpeg")
+        
         if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
-            #os.rename(old_path, new_path)
             os.rename(ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static", ffmpeg_dir+"/ffmpeg")
             print("✅ Carpeta renombrada a ffmpeg")
         else:
             print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
 
-        os.remove(archivo)
-        print(f"archivo {archivo} eliminado")
-        #if os.path.isfile(f"{ffmpeg_dir}/ffmpeg.tar.xz"):
-        #    os.remove(f"{ffmpeg_dir}/ffmpeg.tar.xz")
-        # if os.path.exists(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static"):
-        #    shutil.rmtree(f"{ffmpeg_dir}/ffmpeg-7.0.2-amd64-static")
+        #os.remove(archivo)
+        #print(f"archivo {archivo} eliminado")
+        if os.path.isfile(archivo):
+            os.remove(archivo)
+            print(f"archivo {archivo} eliminado")
+
+        #if os.path.exists(carpeta_archivo_extraido): # ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static"
+        #    shutil.rmtree(carpeta_archivo_extraido)
 
         # Dar permisos de ejecución al binario
-        os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
-        # os.chmod(ffmpeg_bin, 0o755)
-        # os.chmod(ffprobe_bin, 0o755)
+        os.chmod(ffmpeg_dir+"/ffmpeg/ffmpeg", 0o755)  #os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
+        # os.chmod(ffmpeg_bin, 0o755) # os.chmod(ffprobe_bin, 0o755)
     else:
         raise Exception("❌ Sistema operativo no soportado")
 ##################################################
