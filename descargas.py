@@ -42,11 +42,20 @@ if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
     else:
         raise Exception("❌ Sistema operativo no soportado")
 ##################################################
+# BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
 os.makedirs(CARPETA_DESCARGA, exist_ok=True)
 
+# FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
 FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
+
+print(BASE_DIR)
+print(CARPETA_DESCARGA)
+print(FFMPEG_PATH)
+
+# carpeta = os.path.join(BASE_DIR, "descarga")
+# carpeta = "/opt/render/project/src/descarga"
 
 # Limpiar carpeta antes de descargar
 # for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
@@ -82,7 +91,6 @@ def descarga_flutterx():
         print(ruta_completa)
         print("   ➜", archivo)
         try:
-            #os.remove(CARPETA_DESCARGA"/"archivo)
             os.remove(os.path.join(CARPETA_DESCARGA,archivo))
             print(f"archivo eliminado {archivo}")
         except Exception as exep:
@@ -95,7 +103,7 @@ def descarga_flutterx():
         extension = "m4a" if download_type == "audio" else "webm"
 
         if not url:
-            return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
+            return jsonify({"status": "error", "msg": "No ingreso URL"}), 400
 
         # Archivo final siempre será "1.extension"
         final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
