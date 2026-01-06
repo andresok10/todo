@@ -48,15 +48,15 @@ os.makedirs(CARPETA_DESCARGA, exist_ok=True)
 
 FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
 
-#Limpiar carpeta antes de descargar
-#for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
-        #    try:
-        #        os.remove(f)
-        #        current_app.logger.info(f"🗑 Eliminado archivo previo: {f}")
-        #    except Exception as ex:
-        #        current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
+# Limpiar carpeta antes de descargar
+# for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
+#    try:
+#        os.remove(f)
+#        current_app.logger.info(f"🗑 Eliminado archivo previo: {f}")
+#    except Exception as ex:
+#        current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
 
-if os.path.exists(CARPETA_DESCARGA):
+"""if os.path.exists(CARPETA_DESCARGA):
     current_app.logger.info(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
     for archivo in os.listdir(CARPETA_DESCARGA):
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
@@ -71,7 +71,14 @@ if os.path.exists(CARPETA_DESCARGA):
 
     current_app.logger.info(f"📂 Contenido actual2 de {CARPETA_DESCARGA}:")
     for archivo in os.listdir(CARPETA_DESCARGA):
-        current_app.logger.info(f"   ➜ {archivo}")
+        current_app.logger.info(f"   ➜ {archivo}")"""
+
+if os.path.exists(carpeta):
+    print(f"📂 Contenido actual de {carpeta}:")
+    for archivo in os.listdir(carpeta):
+        print("   ➜", archivo)
+else:
+    print(f"❌ La carpeta {carpeta} no existe.")
 
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
@@ -110,26 +117,30 @@ def descarga_flutterx():
             "descargas.serve_download",
             file=os.path.basename(final_file),
             _external=True,
-            _scheme="https"
+            _scheme="https",
         )
 
-        return jsonify({
-            "status": "success",
-            "msg": f"{download_type.capitalize()} descargado con éxito como 1.{extension}.",
-            "download_url": download_url,
-            "extension": extension
-        })
+        return jsonify(
+            {
+                "status": "success",
+                "msg": f"{download_type.capitalize()} descargado con éxito como 1.{extension}.",
+                "download_url": download_url,
+                "extension": extension,
+            }
+        )
 
     except Exception as e:
         current_app.logger.error(f"Error en descarga: {e}")
         return jsonify({"status": "error", "msg": str(e)}), 500
 
+
 @app2.route("/descargax/<path:file>")
 def serve_download(file):
     return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
 
+
 # BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
-'''BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+"""BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 print(BASE_DIR)  # /opt/render/project/src/
 os.makedirs(f"{BASE_DIR}/descarga", exist_ok=True)
 
@@ -244,9 +255,9 @@ def descarga_flutterx():
                 {"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}
             ),
             500,
-        )'''
+        )"""
 
-'''finally:
+"""finally:
         if os.path.exists(carpeta):
             try:
                 current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
@@ -260,11 +271,11 @@ def descarga_flutterx():
 
             current_app.logger.info(f"📂 Contenido actual2 de {carpeta}:")
             for archivo in os.listdir(carpeta):
-                current_app.logger.info(f"   ➜ {archivo}")'''
-        # else:
-        #    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
+                current_app.logger.info(f"   ➜ {archivo}")"""
+# else:
+#    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
 
-'''@app2.route("/descargax/<path:file>")
+"""@app2.route("/descargax/<path:file>")
 def serve_download(file):
     # Ruta completa al archivo temporal
     full_path = os.path.join(BASE_DIR, "descarga", file)
@@ -279,13 +290,13 @@ def serve_download(file):
         current_app.logger.info(f"🗑 Archivo eliminado automáticamente: {full_path}")
     except Exception as e:
         current_app.logger.error(f"❌ Error eliminando archivo: {full_path} | {e}")
-    return response'''
+    return response"""
 
 # Servir correctamente los archivos desde /downloads/
-#@app2.route("/descargax/<path:file>")
-#def serve_download(file): # Sirve los archivos descargados directamente
+# @app2.route("/descargax/<path:file>")
+# def serve_download(file): # Sirve los archivos descargados directamente
 #    return send_from_directory(f"{BASE_DIR}/descarga", file, as_attachment=True)
-    # return send_from_directory(f"{BASE_DIR}/downloads", os.path.basename(filename), as_attachment=True)
+# return send_from_directory(f"{BASE_DIR}/downloads", os.path.basename(filename), as_attachment=True)
 
 
 ## Si quieres habilitar descarga directa de archivos:
