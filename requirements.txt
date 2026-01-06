@@ -2,3 +2,6 @@ flask
 yt-dlp
 requests
 Flask-WTF
+pendulum
+zodiac-sign
+babel
