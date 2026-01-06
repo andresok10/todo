@@ -42,7 +42,6 @@ if not os.path.exists(f"{ffmpeg_dir}/ffmpeg"):
     else:
         raise Exception("❌ Sistema operativo no soportado")
 ##################################################
-app2 = Blueprint("descargas", __name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
 os.makedirs(CARPETA_DESCARGA, exist_ok=True)
@@ -61,12 +60,28 @@ def descarga_flutterx():
             return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
 
         # 🔥 Limpiar carpeta antes de descargar
-        for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
+        #for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
+        #    try:
+        #        os.remove(f)
+        #        current_app.logger.info(f"🗑 Eliminado archivo previo: {f}")
+        #    except Exception as ex:
+        #        current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
+
+        if os.path.exists(CARPETA_DESCARGA):
             try:
-                os.remove(f)
-                current_app.logger.info(f"🗑 Eliminado archivo previo: {f}")
+                current_app.logger.info(f"📂 Contenido actual de {CARPETA_DESCARGA}:")
+                for archivo in os.listdir(CARPETA_DESCARGA):
+                    ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
+                    current_app.logger.info(f"   ➜ {ruta_completa}")
+                    os.remove(os.path.join(CARPETA_DESCARGA, archivo))
+                    current_app.logger.info(f"🗑 Eliminado temporal residual: {archivo}")
             except Exception as ex:
-                current_app.logger.error(f"No se pudo eliminar {f}: {ex}")
+                current_app.logger.error(f"❌ No se pudo eliminar {archivo}: {ex}")
+
+            current_app.logger.info(f"📂 Contenido actual2 de {CARPETA_DESCARGA}:")
+            for archivo in os.listdir(CARPETA_DESCARGA):
+                current_app.logger.info(f"   ➜ {archivo}")
+
 
         # Archivo final siempre será "1.extension"
         final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
