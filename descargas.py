@@ -57,6 +57,7 @@ print(FFMPEG_PATH)
 # carpeta = os.path.join(BASE_DIR, "descarga")
 # carpeta = "/opt/render/project/src/descarga"
 
+
 @app2.route("/descarga_flutter", methods=["POST"])
 def descarga_flutterx():
     for archivo in os.listdir(CARPETA_DESCARGA):
@@ -64,22 +65,22 @@ def descarga_flutterx():
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
         print(ruta_completa)
         print("   ➜", archivo, end="\n")
-        '''try:
+        """try:
             os.remove(ruta_completa)
             print(f"archivo eliminado {archivo}")
         except Exception as exep:
-            print(f"no se pudo eliminar {archivo}: {exep}")'''
+            print(f"no se pudo eliminar {archivo}: {exep}")"""
     print("#############################################")
-    
+
     for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
         print(f"📂 Contenido actual 2 de CARPETA_DESCARGA {f}:")
-        '''try:
+        """try:
             os.remove(f)
             #current_app.logger.info(f"archivo eliminado {f}")
             print(f"archivo eliminado {f}")
         except Exception as exep:
             #current_app.logger.error(f"❌ No se pudo eliminar {f}: {exep}")
-            print(f"no se pudo eliminar {f}: {exep}")'''
+            print(f"no se pudo eliminar {f}: {exep}")"""
 
     try:
         data = request.get_json()
@@ -94,7 +95,7 @@ def descarga_flutterx():
         # Archivo final siempre será "1.extension"
         final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
 
-        '''
+        """
         # Archivo temporal para descargar con yt-dlp
         tmp_file = os.path.join(carpeta, f"temp.%(ext)s")  # siempre fijo, evita conflictos
 
@@ -106,53 +107,8 @@ def descarga_flutterx():
             if not os.path.exists(file):
                 break
             counter += 1
-        '''
+        """
         # Opciones de yt-dlp
-        ydl_opts = {
-            "outtmpl": final_file,
-            "ffmpeg_location": FFMPEG_PATH,
-            "noplaylist": True,
-            "quiet": False,
-        }
-        if download_type == "audio":
-            ydl_opts["format"] = "bestaudio/best"
-        else:
-            ydl_opts["format"] = "bestvideo[ext=webm]+bestaudio[ext=webm]/best"
-            ydl_opts["merge_output_format"] = extension
-            ydl_opts["postprocessor_args"] = ["-strict", "-2"]
-
-        # Descargar
-        with YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-
-        # URL de descarga
-        download_url = url_for(
-            "descargas.serve_download",
-            file=os.path.basename(final_file),
-            _external=True,
-            _scheme="https",
-        )
-
-        return jsonify(
-            {
-                "status": "success",
-                "msg": f"{download_type.capitalize()} descargado con éxito como 1.{extension}.",
-                "download_url": download_url,
-                "extension": extension,
-            }
-        )
-
-    except Exception as e:
-        current_app.logger.error(f"Error en descarga: {e}")
-        return jsonify({"status": "error", "msg": str(e)}), 500
-
-
-@app2.route("/descargax/<path:file>")
-def serve_download(file):
-    return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
-
-
-"""
         # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
             ydl_opts = {
@@ -180,22 +136,13 @@ def serve_download(file):
                 #'postprocessor_args': ['-c', 'copy', '-strict', '-2']
             }
 
-
-        # Renombrar temporal a archivo final con contador
-        #for f in glob.glob(os.path.join(carpeta, "temp.*")):
-            #os.rename(f, final_file)
-        #    os.rename(f, file)
-
-        # Renombrar temporal a archivo final (solo si existe)
-        temp_files = glob.glob(os.path.join(carpeta, "temp.*"))
-        if not temp_files:
-            raise FileNotFoundError("No se encontró archivo temporal descargado.")
-        #os.rename(temp_files[0], final_file)
-        os.rename(temp_files[0], file)
+        # Descargar
+        with YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
 
         # Después de descargar con yt_dlp  # Generar respuesta
-        file_basename = os.path.basename(file)  # ej: 1.webm, 2.m4a, etc.
-        real_extension = file_basename.split(".")[-1]  # extrae 'webm', 'mp4', etc.
+        #file_basename = os.path.basename(file)  # ej: 1.webm, 2.m4a, etc.
+        #real_extension = file_basename.split(".")[-1]  # extrae 'webm', 'mp4', etc.
 
         # Nombre base del archivo descargado
         # file_basename = os.path.basename(file)
@@ -205,32 +152,53 @@ def serve_download(file):
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
         # download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
         # download_url = url_for("descargax", file=file_basename, _external=True, _scheme="https")
+        # URL de descarga
         download_url = url_for(
+            "descargas.serve_download",
+            file=os.path.basename(final_file),
+            _external=True,
+            _scheme="https",
+        )
+        '''download_url = url_for(
             "descargas.serve_download",
             file=file_basename,
             _external=True,
             _scheme="https",
-        )
+        )'''
 
-        msgx = (
-            f"{download_type.capitalize()} descargado con éxito como {file_basename}."
-        )
+        #msgx = (f"{download_type.capitalize()} descargado con éxito como {file_basename}.")
         return jsonify(
             {
                 "status": "success",
-                "msg": msgx,
+                #"msg": msgx,
+                "msg": f"{download_type.capitalize()} descargado con éxito como 1.{extension}.",
                 "download_url": download_url,
-                "extension": real_extension,  # enviamos la extensión real
+                "extension": extension,
+                #"extension": real_extension,  # enviamos la extensión real
             }
         )
+
     except Exception as e:
         print("❌ ERROR:", str(e))
-        return (
-            jsonify(
-                {"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}
-            ),
-            500,
-        )"""
+        current_app.logger.error(f"Error en descarga: {e}")
+        return jsonify({"status": "error", "msg": str(e)}), 500
+        #return (jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}),500,)
+
+@app2.route("/descargax/<path:file>")
+def serve_download(file):
+    return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
+
+
+"""Renombrar temporal a archivo final con contador
+#for f in glob.glob(os.path.join(carpeta, "temp.*")):
+#os.rename(f, final_file)#    os.rename(f, file)
+
+# Renombrar temporal a archivo final (solo si existe)
+temp_files = glob.glob(os.path.join(carpeta, "temp.*"))
+if not temp_files:
+raise FileNotFoundError("No se encontró archivo temporal descargado.")
+#os.rename(temp_files[0], final_file)
+os.rename(temp_files[0], file)
 
 # else:
 #    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
@@ -240,7 +208,6 @@ def serve_download(file):
 # def serve_download(file): # Sirve los archivos descargados directamente
 #    return send_from_directory(f"{BASE_DIR}/descarga", file, as_attachment=True)
 # return send_from_directory(f"{BASE_DIR}/downloads", os.path.basename(filename), as_attachment=True)
-
 
 ## Si quieres habilitar descarga directa de archivos:
 # @app.route("/downloads/<path:filename>")
@@ -254,4 +221,4 @@ def serve_download(file):
 
 # return send_from_directory(file_path, filename, as_attachment=True)
 # return send_from_directory("downloads", output_file, as_attachment=True)
-#    return send_from_directory(BASE_DIR, filename, as_attachment=True)
+#    return send_from_directory(BASE_DIR, filename, as_attachment=True)"""
