@@ -61,10 +61,10 @@ print(FFMPEG_PATH)
 def descarga_flutterx():
     print(f"Contenido actual de {CARPETA_DESCARGA}:")
     for archivo in os.listdir(CARPETA_DESCARGA):
-        print(f"📂 Contenido actual de {archivo}:")
+        print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
         print(ruta_completa)
-        print("   ➜", archivo)
+        print("   ➜", archivo,+",", end=" ")
         #try:
         #    os.remove(os.path.join(CARPETA_DESCARGA, archivo))
         #    print(f"archivo eliminado {archivo}")
@@ -73,13 +73,13 @@ def descarga_flutterx():
     print("#############################################")
     
     for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
-        print(f"📂 Contenido actual de {f}:")
-        try:
-            os.remove(f)
-            print(f"archivo eliminado {f}")
+        print(f"📂 Contenido actual 2 de CARPETA_DESCARGA {f}:")
+        #try:
+        #    os.remove(f)
+        #    print(f"archivo eliminado {f}")
             #current_app.logger.info(f"archivo eliminado {f}")
-        except Exception as exep:
-            print(f"no se pudo eliminar {f}: {exep}")
+        #except Exception as exep:
+        #    print(f"no se pudo eliminar {f}: {exep}")
             #current_app.logger.error(f"❌ No se pudo eliminar {f}: {exep}")
 
     try:
