@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, url_for, send_from_directory, cur
 from yt_dlp import YoutubeDL  # pip install yt-dlp
 import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform
 import glob
+from pathlib import Path
 
 app2 = Blueprint("descargas", __name__)
 
@@ -23,17 +24,25 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         print("✅ Archivo Extraído")
 
         # Listar solo carpetas dentro de ffmpeg_dir
-        carpeta_extraida = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x))]
+        '''carpeta_extraida = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x))]
         print(carpeta_extraida)
         # Obtener la carpeta más reciente según fecha de modificación
         ultima_carpeta = max(carpeta_extraida, key=lambda x: os.path.getmtime(os.path.join(ffmpeg_dir, x)))
-        print("Última carpeta creada/modificada:", ultima_carpeta)
+        print("Última carpeta creada/modificada:", ultima_carpeta)'''
 
-        for x in os.listdir(ffmpeg_dir):
-            print(x)
+        #ffmpeg_path = Path(ffmpeg_dir)
+        #carpetas = [d for d in ffmpeg_path.iterdir() if d.is_dir()]
+        carpetas = [x for x in Path(ffmpeg_dir).iterdir() if x.is_dir()]
+        ultima_carpeta = max(carpetas, key=lambda d: d.stat().st_mtime)
+        print("Última carpeta:", ultima_carpeta.name)
 
-        for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
-            print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")
+
+        #for x in os.listdir(ffmpeg_dir):
+        #    print(x)
+        carpeta_extraida = [x for x in os.listdir(ffmpeg_dir)][-3]
+        print(carpeta_extraida) #como obtener el ultimo dato de la lista
+        #for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
+        #    print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")
         
         if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
             os.rename(ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static", ffmpeg_dir+"/ffmpeg")
