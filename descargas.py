@@ -22,6 +22,9 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
         print("✅ Extraído")
 
+        carpeta_extraida = [x for x in os.listdir(ffmpeg_dir)]
+        print(carpeta_extraida)
+
         for x in os.listdir(ffmpeg_dir):
             print(x)
         for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
