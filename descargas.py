@@ -162,26 +162,7 @@ def descarga_flutterx():
             500,
         )
 
-    finally:
-        # Esto se ejecuta siempre, haya error o no
-        # carpeta = os.path.join(BASE_DIR, "descarga")
-        # if os.path.exists(carpeta):
-        #    print(f"📂 Contenido actual de: {carpeta}")
-        #    for nombre in os.listdir(carpeta):
-        # ruta_completa = os.path.join(carpeta, nombre)
-        # print("   ➜", ruta_completa)
-        #        print("   ➜", nombre)
-        # else:
-        #    print(f"❌ La carpeta {carpeta} no existe.")
-        ########################################################
-        # carpeta = "/opt/render/project/src/descarga"
-        # if os.path.exists(carpeta):
-        #    print(f"📂 Contenido de {carpeta}:")
-        #    for archivo in os.listdir(carpeta):
-        #        print("   ➜", archivo)
-        # else:
-        #    print(f"❌ La carpeta {carpeta} no existe.")
-
+    '''finally:
         if os.path.exists(carpeta):
             try:
                 current_app.logger.info(f"📂 Contenido actual de {carpeta}:")
@@ -195,15 +176,30 @@ def descarga_flutterx():
 
             current_app.logger.info(f"📂 Contenido actual2 de {carpeta}:")
             for archivo in os.listdir(carpeta):
-                current_app.logger.info(f"   ➜ {archivo}")
+                current_app.logger.info(f"   ➜ {archivo}")'''
         # else:
         #    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
 
-# Servir correctamente los archivos desde /downloads/
 @app2.route("/descargax/<path:file>")
 def serve_download(file):
-    # Sirve los archivos descargados directamente
-    return send_from_directory(f"{BASE_DIR}/descarga", file, as_attachment=True)
+    # Ruta completa al archivo temporal
+    full_path = os.path.join(BASE_DIR, "descarga", file)
+    if not os.path.exists(full_path):
+        return "Archivo no encontrado", 404
+    # Usamos send_file y luego eliminamos el archivo
+    response = send_file(full_path, as_attachment=True)
+    # Borrar el archivo después de servirlo
+    try:
+        os.remove(full_path)
+        current_app.logger.info(f"🗑 Archivo eliminado automáticamente: {full_path}")
+    except Exception as e:
+        current_app.logger.error(f"❌ Error eliminando archivo: {full_path} | {e}")
+    return response
+
+# Servir correctamente los archivos desde /downloads/
+#@app2.route("/descargax/<path:file>")
+#def serve_download(file): # Sirve los archivos descargados directamente
+#    return send_from_directory(f"{BASE_DIR}/descarga", file, as_attachment=True)
     # return send_from_directory(f"{BASE_DIR}/downloads", os.path.basename(filename), as_attachment=True)
 
 
