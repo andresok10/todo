@@ -4,7 +4,7 @@ import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform
 import glob
 from pathlib import Path
 
-app3 = Blueprint("descargas", __name__)
+app3 = Blueprint("descargas_web", __name__)
 
 ffmpeg_dir = os.path.dirname(os.path.abspath(__file__)) #/opt/render/project/src
 
