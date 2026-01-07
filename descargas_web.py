@@ -148,7 +148,7 @@ def descargaxx():
         # download_url = url_for("descargax", file=file_basename, _external=True, _scheme="https")
         # URL de descarga
         download_url = url_for(
-            "descargas.serve_download",
+            "descargas_web.serve_downloadx",
             file=os.path.basename(final_file),
             _external=True,
             _scheme="https",
@@ -172,8 +172,8 @@ def descargaxx():
         return jsonify({"status": "error", "msg": str(e)}), 500
         #return (jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}),500,)
 
-@app3.route("/descargax/<path:file>") # Servir correctamente los archivos desde /downloads/
-def serve_download(file): # Sirve los archivos descargados directamente
+@app3.route("/descargaxx/<path:file>") # Servir correctamente los archivos desde /downloads/
+def serve_downloadx(file): # Sirve los archivos descargados directamente
     return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
     #return send_from_directory(CARPETA_DESCARGA, os.path.basename(filename), as_attachment=True)
 

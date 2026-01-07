@@ -164,7 +164,7 @@ def descarga_flutterx():
         # download_url = url_for("descargax", file=file_basename, _external=True, _scheme="https")
         # URL de descarga
         download_url = url_for(
-            "descargas.serve_download",
+            "descargas_android.serve_download",
             file=os.path.basename(final_file),
             _external=True,
             _scheme="https",
