@@ -6,19 +6,16 @@ from pathlib import Path
 
 app2 = Blueprint("descargas", __name__)
 
-ffmpeg_dir = os.path.dirname(os.path.abspath(__file__))
-print(ffmpeg_dir)
+ffmpeg_dir = os.path.dirname(os.path.abspath(__file__)) #/opt/render/project/src
 
-is_linux = platform.system().lower().startswith("linux") # Detectar sistema operativo
-print(is_linux)
+is_linux = platform.system().lower().startswith("linux") # Detectar sistema operativo == true
 
 if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
     print("FFmpeg no encontrado... Descargando...")
     ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
     if is_linux:
         url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-        archivo = ffmpeg_dir+"/ffmpeg.tar.xz"
-        print(archivo)
+        archivo = ffmpeg_dir+"/ffmpeg.tar.xz" #/opt/render/project/src/ffmpeg.tar.xz
         urllib.request.urlretrieve(url, archivo)
         with tarfile.open(archivo, "r:xz") as tar: #tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
             nombres = [m.name for m in tar.getmembers() if m.isdir()]
@@ -27,30 +24,24 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
             print("✅ Archivo Extraído")
         carpeta_extraida  = "ffmpeg-7.0.2-amd64-static"
 
-        #carpeta_extraidax = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x)) and not x.startswith(("__", "."))]
-        #print(carpeta_extraidax)
-        #ultima_carpeta = max(carpeta_extraidax, key=lambda x: os.path.getmtime(os.path.join(ffmpeg_dir, x)))
-        #print("Última carpeta creada/modificada:", ultima_carpeta)
-
-        carpeta_extraidax = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x)) and not x.startswith(("__", "."))]
+        '''carpeta_extraidax = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x)) and not x.startswith(("__", "."))]
         print(carpeta_extraidax)
         ultima_carpeta = max(carpeta_extraidax, key=lambda x: os.path.getmtime(os.path.join(ffmpeg_dir, x)))
-        print("Última carpeta creada/modificada:", ultima_carpeta)
+        print("Última carpeta creada/modificada:", ultima_carpeta)'''
 
-
-        carpetas = [x for x in Path(ffmpeg_dir).iterdir() if x.is_dir() and not x.name.startswith(("__", "."))]
+        '''carpetas = [x for x in Path(ffmpeg_dir).iterdir() if x.is_dir() and not x.name.startswith(("__", "."))]
         ultima_carpeta = max(carpetas, key=lambda x: x.stat().st_mtime)
-        print("Última carpeta:", ultima_carpeta.name)
+        print("Última carpeta:", ultima_carpeta.name)'''
 
         for x in os.listdir(ffmpeg_dir):
             print(x)
+        
         carpeta_extraidaz = [x for x in os.listdir(ffmpeg_dir)][-3]
         print(carpeta_extraidaz) #como obtener el ultimo dato de la lista
         #for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
         #    print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")
         
         if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
-            #os.rename(ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static", ffmpeg_dir+"/ffmpeg")
             os.rename(ffmpeg_dir+"/"+carpeta_extraida, ffmpeg_dir+"/ffmpeg")
             print("✅ Carpeta renombrada a ffmpeg")
         else:
@@ -58,7 +49,7 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
 
         #os.remove(archivo)
         #print(f"archivo {archivo} eliminado")
-        if os.path.isfile(archivo):
+        if os.path.exists(archivo):
             os.remove(archivo)
             print(f"archivo {archivo} eliminado")
 
