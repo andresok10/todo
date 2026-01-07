@@ -171,7 +171,7 @@ def descarga_flutterx():
         )
 
         #msgx = (f"{download_type.capitalize()} descargado con éxito como {file_basename}.")
-        return jsonify(
+        '''return jsonify(
             {
                 "status": "success",
                 #"msg": msgx,
@@ -180,7 +180,16 @@ def descarga_flutterx():
                 "extension": extension,
                 #"extension": real_extension,  # enviamos la extensión real
             }
-        )
+        )'''
+        return jsonify({
+            "status": "success",
+            "msg": f"{download_type.capitalize()} listo",
+            "download_url": download_url,
+            "extension": extension,
+            "file_name": f"1.{extension}",
+            "mime_type": "audio/mp4" if extension=="m4a" else "video/webm"
+        })
+
 
     except Exception as e:
         print("❌ ERROR:", str(e))
