@@ -1,7 +1,8 @@
 from flask import Flask, current_app
 from datetime import datetime
 from calendario import app1
-from descargas import app2
+from descargas_android import app2
+from descargas_web import app3
 import os, urllib.request,zipfile ,tarfile, ssl, certifi, shutil
 
 app = Flask(__name__)
@@ -13,6 +14,7 @@ def inject_globals():
 
 app.register_blueprint(app1)
 app.register_blueprint(app2)
+app.register_blueprint(app3)
 
 #carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "descargas")
     
