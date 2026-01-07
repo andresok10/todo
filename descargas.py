@@ -33,13 +33,12 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         ultima_carpeta = max(carpetas, key=lambda x: x.stat().st_mtime)
         print("Última carpeta:", ultima_carpeta.name)'''
 
-        for x in os.listdir(ffmpeg_dir):
+        '''for x in os.listdir(ffmpeg_dir):
             print(x)
-        
         carpeta_extraidaz = [x for x in os.listdir(ffmpeg_dir)][-3]
         print(carpeta_extraidaz) #como obtener el ultimo dato de la lista
-        #for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
-        #    print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")
+        for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
+            print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")'''
         
         if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
             os.rename(ffmpeg_dir+"/"+carpeta_extraida, ffmpeg_dir+"/ffmpeg")
