@@ -88,7 +88,7 @@ def descarga_flutterx():
             print(f"archivo eliminado {archivo}")
         except Exception as exep:
             print(f"no se pudo eliminar {archivo}: {exep}")
-            
+
     print("#############################################")
 
     for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
@@ -114,19 +114,14 @@ def descarga_flutterx():
         # Archivo final siempre será "1.extension"
         final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
 
-        """
-        # Archivo temporal para descargar con yt-dlp
-        tmp_file = os.path.join(carpeta, f"temp.%(ext)s")  # siempre fijo, evita conflictos
-
-        # Generar nombre único
+        """# Generar nombre único
         counter = 1
         while True:
             file = f"{BASE_DIR}/descarga/{counter}.{extension}"
             # file = f"{BASE_DIR}/descarga/{counter}"
             if not os.path.exists(file):
                 break
-            counter += 1
-        """
+            counter += 1"""
         # Opciones de yt-dlp
         # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
@@ -162,11 +157,7 @@ def descarga_flutterx():
         # Después de descargar con yt_dlp  # Generar respuesta
         #file_basename = os.path.basename(file)  # ej: 1.webm, 2.m4a, etc.
         #real_extension = file_basename.split(".")[-1]  # extrae 'webm', 'mp4', etc.
-
-        # Nombre base del archivo descargado
         # file_basename = os.path.basename(file)
-        # file_basename = f"{BASE_DIR}/descarga/{counter}.{extension}"
-        # file_basename = f"{counter}.{extension}"
 
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
         # download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
@@ -178,12 +169,6 @@ def descarga_flutterx():
             _external=True,
             _scheme="https",
         )
-        '''download_url = url_for(
-            "descargas.serve_download",
-            file=file_basename,
-            _external=True,
-            _scheme="https",
-        )'''
 
         #msgx = (f"{download_type.capitalize()} descargado con éxito como {file_basename}.")
         return jsonify(
@@ -203,10 +188,10 @@ def descarga_flutterx():
         return jsonify({"status": "error", "msg": str(e)}), 500
         #return (jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}),500,)
 
-@app2.route("/descargax/<path:file>")
-def serve_download(file):
+@app2.route("/descargax/<path:file>") # Servir correctamente los archivos desde /downloads/
+def serve_download(file): # Sirve los archivos descargados directamente
     return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
-
+    #return send_from_directory(CARPETA_DESCARGA, os.path.basename(filename), as_attachment=True)
 
 """Renombrar temporal a archivo final con contador
 #for f in glob.glob(os.path.join(carpeta, "temp.*")):
@@ -218,15 +203,6 @@ if not temp_files:
 raise FileNotFoundError("No se encontró archivo temporal descargado.")
 #os.rename(temp_files[0], final_file)
 os.rename(temp_files[0], file)
-
-# else:
-#    current_app.logger.info(f"❌ La carpeta {carpeta} no existe.")
-
-# Servir correctamente los archivos desde /downloads/
-# @app2.route("/descargax/<path:file>")
-# def serve_download(file): # Sirve los archivos descargados directamente
-#    return send_from_directory(f"{BASE_DIR}/descarga", file, as_attachment=True)
-# return send_from_directory(f"{BASE_DIR}/downloads", os.path.basename(filename), as_attachment=True)
 
 ## Si quieres habilitar descarga directa de archivos:
 # @app.route("/downloads/<path:filename>")
