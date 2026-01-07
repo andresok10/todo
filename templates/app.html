@@ -235,50 +235,101 @@
         </div>
 
 
+        <!--<script>
+                    // Intentar forzar descarga automática
+                    // window.location.href = "{{ download_url }}";
+        
+                    // Script para mantener la posición
+                    window.addEventListener("DOMContentLoaded", function () { // const msgDiv = document.getElementById("resultado-msg");
+                        const msgDiv = document.getElementById("descargar-form");
+                        if (msgDiv) {
+                            msgDiv.scrollIntoView({behavior: "smooth", block: "center"});
+                        }
+                    });
+                    window.addEventListener("DOMContentLoaded", function () {
+                        const msgDiv = document.getElementById("edad");
+                        if (msgDiv) {
+                            msgDiv.scrollIntoView({behavior: "smooth", block: "start"});
+                        }
+                    });
+        
+                    // Script para manejar la descarga vía AJAX
+                    const form = document.querySelector("#descargar-form form");
+        
+                    form.addEventListener("submit", async function (e) {
+                        e.preventDefault();
+        
+                        const formData = new FormData(form);
+                        const resp = await fetch("/descarga", {
+                            method: "POST",
+                            body: formData
+                        });
+                        // ////////////////////////////////////////////////
+                        const data = await resp.json();
+                        const msgDiv = document.getElementById("resultado-msg");
+                        msgDiv.innerHTML = `<div class="alert ${
+                            data.status
+                        }">${
+                            data.msg
+                        }</div>`;
+                        msgDiv.scrollIntoView({behavior: "smooth", block: "center"});
+        
+                        if (data.status === "success" && data.download_url) { // Dispara la descarga automáticamente
+                            window.location.href = data.download_url;
+                        }
+                    });
+                </script>-->
         <script>
-            // Intentar forzar descarga automática
-            // window.location.href = "{{ download_url }}";
-
-            // Script para mantener la posición
-            window.addEventListener("DOMContentLoaded", function () { // const msgDiv = document.getElementById("resultado-msg");
-                const msgDiv = document.getElementById("descargar-form");
-                if (msgDiv) {
-                    msgDiv.scrollIntoView({behavior: "smooth", block: "center"});
+            document.addEventListener("DOMContentLoaded", function () { // scroll al formulario
+                const formBox = document.getElementById("descargar-form");
+                if (formBox) {
+                    formBox.scrollIntoView({behavior: "smooth", block: "center"});
                 }
-            });
-            window.addEventListener("DOMContentLoaded", function () {
-                const msgDiv = document.getElementById("edad");
-                if (msgDiv) {
-                    msgDiv.scrollIntoView({behavior: "smooth", block: "start"});
-                }
-            });
 
-            // Script para manejar la descarga vía AJAX
-            const form = document.querySelector("#descargar-form form");
-
-            form.addEventListener("submit", async function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(form);
-                const resp = await fetch("/descarga", {
-                    method: "POST",
-                    body: formData
-                });
-                // ////////////////////////////////////////////////
-                const data = await resp.json();
+                const form = document.querySelector("#descargar-form form");
                 const msgDiv = document.getElementById("resultado-msg");
-                msgDiv.innerHTML = `<div class="alert ${
-                    data.status
-                }">${
-                    data.msg
-                }</div>`;
-                msgDiv.scrollIntoView({behavior: "smooth", block: "center"});
 
-                if (data.status === "success" && data.download_url) { // Dispara la descarga automáticamente
-                    window.location.href = data.download_url;
-                }
+                form.addEventListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    msgDiv.innerHTML = "Procesando descarga…";
+
+                    const payload = {
+                        url: document.getElementById("url").value,
+                        download_type: document.getElementById("download_type").value
+                    };
+
+                    try {
+                        const resp = await fetch("/descarga", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const data = await resp.json();
+
+                        msgDiv.innerHTML = `<div class="alert ${
+                            data.status
+                        }">${
+                            data.msg
+                        }</div>`;
+                        msgDiv.scrollIntoView({behavior: "smooth", block: "center"});
+
+                        // descargar automáticamente
+                        if (data.status === "success" && data.download_url) {
+                            window.location.href = data.download_url;
+                        }
+
+                    } catch (err) {
+                        msgDiv.innerHTML = `<div class="alert error">Error en la petición</div>`;
+                    }
+                });
+
             });
         </script>
+
     </body>
 
 </html>
