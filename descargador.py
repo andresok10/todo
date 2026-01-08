@@ -4,7 +4,7 @@ import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform
 import glob
 from pathlib import Path
 
-app2 = Blueprint("descargas_android", __name__)
+app2 = Blueprint("descargas_ok", __name__)
 
 ffmpeg_dir = os.path.dirname(os.path.abspath(__file__)) #/opt/render/project/src
 
@@ -76,8 +76,8 @@ print(FFMPEG_PATH)
 # carpeta = os.path.join(BASE_DIR, "descarga")
 # carpeta = "/opt/render/project/src/descarga"
 
-@app2.route("/descarga_flutter", methods=["POST"])
-def descarga_flutterx():
+@app2.route("/descarga", methods=["POST"])
+def descargax():
     for archivo in os.listdir(CARPETA_DESCARGA):
         print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
@@ -159,7 +159,7 @@ def descarga_flutterx():
         # download_url = url_for("descargax", file=file_basename, _external=True, _scheme="https")
         # URL de descarga
         download_url = url_for(
-            "descargas_android.serve_download",
+            "descargas_ok.serve_download",
             file=os.path.basename(final_file),
             _external=True,
             _scheme="https",
@@ -182,7 +182,7 @@ def descarga_flutterx():
         return jsonify({"status": "error", "msg": str(e)}), 500
         #return (jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}),500,)
 
-@app2.route("/descargax/<path:file>") # Servir correctamente los archivos desde /downloads/
+@app2.route("/server/<path:file>") # Servir correctamente los archivos desde /downloads/
 def serve_download(file): # Sirve los archivos descargados directamente
     return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
     #return send_from_directory(CARPETA_DESCARGA, os.path.basename(filename), as_attachment=True)
