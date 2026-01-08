@@ -181,13 +181,16 @@ def descarga_flutterx():
                 #"extension": real_extension,  # enviamos la extensión real
             }
         )'''
+        
+        file_name = f"1.{extension}"
+        mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
             "status": "success",
-            "msg": f"{download_type.capitalize()} listo",
+            "msg": f"{download_type.capitalize()} descargado con exito: ({file_name})",
             "download_url": download_url,
             "extension": extension,
-            "file_name": f"1.{extension}",
-            "mime_type": "audio/mp4" if extension=="m4a" else "video/webm"
+            "file_name": file_name,
+            "mime_type": mime_type
         })
 
 
