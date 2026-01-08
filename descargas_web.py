@@ -6,45 +6,6 @@ from pathlib import Path
 
 app3 = Blueprint("descargas_web", __name__)
 
-ffmpeg_dir = os.path.dirname(os.path.abspath(__file__)) #/opt/render/project/src
-
-is_linux = platform.system().lower().startswith("linux") # Detectar sistema operativo == true
-
-'''if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
-    print("FFmpeg no encontrado... Descargando...")
-    ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
-    if is_linux:
-        url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-        archivo = ffmpeg_dir+"/ffmpeg.tar.xz" #/opt/render/project/src/ffmpeg.tar.xz
-        urllib.request.urlretrieve(url, archivo)
-        with tarfile.open(archivo, "r:xz") as tar: #tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
-            nombres = [m.name for m in tar.getmembers() if m.isdir()]
-            print("Carpetas dentro del tar:", nombres)
-            tar.extractall(ffmpeg_dir, filter="data")
-            print("✅ Archivo Extraído")
-        carpeta_extraida  = "ffmpeg-7.0.2-amd64-static"
-        
-        if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
-            os.rename(ffmpeg_dir+"/"+carpeta_extraida, ffmpeg_dir+"/ffmpeg")
-            print("✅ Carpeta renombrada a ffmpeg")
-        else:
-            print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
-
-        #os.remove(archivo)
-        #print(f"archivo {archivo} eliminado")
-        if os.path.exists(archivo):
-            os.remove(archivo)
-            print(f"archivo {archivo} eliminado")
-
-        #if os.path.exists(carpeta_archivo_extraido): # ffmpeg_dir+"/ffmpeg-7.0.2-amd64-static"
-        #    shutil.rmtree(carpeta_archivo_extraido)
-
-        # Dar permisos de ejecución al binario
-        os.chmod(ffmpeg_dir+"/ffmpeg/ffmpeg", 0o755)  #os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
-        # os.chmod(ffmpeg_bin, 0o755) # os.chmod(ffprobe_bin, 0o755)
-    else:
-        raise Exception("❌ Sistema operativo no soportado")'''
-##################################################
 # BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
