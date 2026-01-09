@@ -113,7 +113,6 @@ def siguiente_contador(extension):
 
 @app2.route("/descarga", methods=["POST"])
 def descargax():
-    limpiar_por_contador()
     '''for archivo in os.listdir(CARPETA_DESCARGA):
         print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
@@ -152,9 +151,8 @@ def descargax():
 
         # Generar nombre único
         limpiar_por_contador(extension)
-
         contador = siguiente_contador(extension)
-        final_name = f"{contador}.{extension}"
+        final_name = contador+"."+extension
         final_file = os.path.join(CARPETA_DESCARGA, final_name)
         '''counter = 1
         while True:
@@ -200,7 +198,6 @@ def descargax():
             _external=True,
             _scheme="https",
         )
-        #final_name = counter+"."+extension
     
         mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
