@@ -103,7 +103,7 @@ def descargax():
 
     try:
         data = request.get_json()
-        url = data.get("url").split("?")[0]
+        #url = data.get("url").split("?")[0]
         download_type = data.get("download_type", "video")
         extension = "m4a" if download_type == "audio" else "webm" # ej: mp4, mkv, webm, avi, mp3...
 
@@ -111,7 +111,7 @@ def descargax():
             return jsonify({"status": "error", "msg": "No ingreso URL"}), 400
 
         # Archivo final siempre será "1.extension"
-        final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
+        #final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
 
         # Generar nombre único
         counter = 1
