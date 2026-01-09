@@ -3,6 +3,10 @@ from datetime import datetime
 from calendario import app1
 from descargador import app2
 import os, urllib.request,zipfile ,tarfile, ssl, certifi, shutil
+        
+from bootstrap_google import bootstrap_calendar_token
+
+bootstrap_calendar_token()        
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
