@@ -77,7 +77,16 @@ if not os.path.exists(BASE_DIR+"/ffmpeg"):
 
 @app2.route("/descarga", methods=["POST"])
 def descargax():
-    
+    for archivo in os.listdir(CARPETA_DESCARGA):
+        print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
+        ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
+        print(ruta_completa)
+        print("   ➜", archivo, end="\n")
+        try:
+            os.remove(ruta_completa)
+            print(f"✅ archivo eliminado {archivo}")
+        except Exception as exep:
+            print(f"❌ no se pudo eliminar {archivo}: {exep}")
 
     print("#############################################")
 
@@ -110,7 +119,7 @@ def descargax():
             final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
             if not os.path.exists(final_file):
                 break
-            counter += 1
+            #counter += 1
         # Opciones de yt-dlp
         # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
@@ -171,16 +180,6 @@ def descargax():
 
 @app2.route("/server/<path:file>") # Servir correctamente los archivos desde /downloads/
 def serve_download(file): # Sirve los archivos descargados directamente
-    for archivo in os.listdir(CARPETA_DESCARGA):
-        print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
-        ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
-        print(ruta_completa)
-        print("   ➜", archivo, end="\n")
-        try:
-            os.remove(ruta_completa)
-            print(f"✅ archivo eliminado {archivo}")
-        except Exception as exep:
-            print(f"❌ no se pudo eliminar {archivo}: {exep}")
     return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
     #return send_from_directory(CARPETA_DESCARGA, os.path.basename(filename), as_attachment=True)
 
