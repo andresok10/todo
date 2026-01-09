@@ -21,7 +21,6 @@ class FormDescuento(FlaskForm):
 
 @app1.route("/", methods=["GET", "POST"])
 def calendario_app():
-
     # ===== FECHA Y HORA ACTUAL (TZ FIJA) =====
     ahora = pendulum.now("America/Guayaquil")
     #hoy = pendulum.today("America/Guayaquil") # no maneja horas
@@ -44,9 +43,7 @@ def calendario_app():
 
     # ===== VARIABLES SIEMPRE DEFINIDAS =====
     edad_anos = edad_meses = edad_dias = None
-    signo = ""
-    fn = ""
-    cumple = ""
+    signo = fn = cumple = ""
 
     diff_data = None
     descuento = None
