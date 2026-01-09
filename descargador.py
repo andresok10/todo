@@ -112,16 +112,17 @@ def descargax():
             return jsonify({"status": "error", "msg": "No ingreso URL"}), 400
 
         # Archivo final siempre será "1.extension"
-        final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
+        #final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
 
-        """# Generar nombre único
+        # Generar nombre único
         counter = 1
         while True:
-            file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            #file = f"{BASE_DIR}/descarga/{counter}.{extension}"
+            final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
             # file = f"{BASE_DIR}/descarga/{counter}"
-            if not os.path.exists(file):
+            if not os.path.exists(final_file):
                 break
-            counter += 1"""
+            counter += 1
         # Opciones de yt-dlp
         # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
@@ -165,7 +166,7 @@ def descargax():
             _scheme="https",
         )
         
-        file_name = f"1.{extension}"
+        file_name = f"{counter}.{extension}"
         mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
             "status": "success",

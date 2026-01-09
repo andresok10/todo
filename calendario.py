@@ -3,36 +3,29 @@ from flask import Blueprint, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, DecimalField
 from wtforms.validators import DataRequired
-
 import pendulum
 from babel.dates import get_month_names
 from zodiac_sign import get_zodiac_sign
 
 app1 = Blueprint("calendario", __name__)
 
-# -------------------------
-# FORMULARIOS
-# -------------------------
 class FormEdad(FlaskForm):
     fecha = StringField(
         "Fecha de nacimiento (DD/MM/YYYY)",
         validators=[DataRequired()]
     )
 
-
 class FormDescuento(FlaskForm):
     monto = DecimalField("Monto", validators=[DataRequired()])
     porc = DecimalField("Porcentaje", validators=[DataRequired()])
 
-
-# -------------------------
-# RUTA PRINCIPAL
-# -------------------------
 @app1.route("/", methods=["GET", "POST"])
 def calendario_app():
 
-    # ===== FECHA ACTUAL (TZ FIJA) =====
+    # ===== FECHA Y HORA ACTUAL (TZ FIJA) =====
     ahora = pendulum.now("America/Guayaquil")
+    #hoy = pendulum.today("America/Guayaquil") # no maneja horas
+    #hoy = pendulum.now("America/Guayaquil") # si maneja horas
 
     f1 = FormEdad()
     f2 = FormDescuento()
@@ -51,10 +44,6 @@ def calendario_app():
 
     # ===== VARIABLES SIEMPRE DEFINIDAS =====
     edad_anos = edad_meses = edad_dias = None
-    #edad_anos = None
-    #edad_meses = None
-    #edad_dias = None
-
     signo = ""
     fn = ""
     cumple = ""
@@ -71,14 +60,13 @@ def calendario_app():
                 "DD/MM/YYYY",
                 tz="America/Guayaquil"
             )
-
             # ---- EDAD EXACTA ----
             periodo = nacimiento.diff(ahora)
 
             edad_anos = periodo.years
             edad_meses = periodo.months
             edad_dias = periodo.remaining_days
-
+            
             # ---- PRÓXIMO CUMPLEAÑOS (00:00) ----
             cumple_d = pendulum.datetime(
                 ahora.year,
