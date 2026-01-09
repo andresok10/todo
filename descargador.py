@@ -129,32 +129,17 @@ def descargax():
         except Exception as exep:
             print(f"❌ no se pudo eliminar {archivo}: {exep}")"""
 
+    for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
+        print(f"📂 Contenido actual 2 de CARPETA_DESCARGA {f}:")
+        print(f)
+        """try:
+                os.remove(f)
+                #current_app.logger.info(f"archivo eliminado {f}")
+                print(f"archivo eliminado {f}")
+            except Exception as exep:
+                #current_app.logger.error(f"❌ No se pudo eliminar {f}: {exep}")
+                print(f"no se pudo eliminar {f}: {exep}")"""
     print("#############################################")
-
-    # for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
-    #    print(f"📂 Contenido actual 2 de CARPETA_DESCARGA {f}:")
-    """try:
-            os.remove(f)
-            #current_app.logger.info(f"archivo eliminado {f}")
-            print(f"archivo eliminado {f}")
-        except Exception as exep:
-            #current_app.logger.error(f"❌ No se pudo eliminar {f}: {exep}")
-            print(f"no se pudo eliminar {f}: {exep}")"""
-
-    # Generar nombre único
-    """counter = 1
-        while True:
-            final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
-            if not os.path.exists(final_file):
-                break
-            counter += 1"""
-
-    # uid = uuid.uuid4().hex
-    # file_name = f"{uid}.{extension}"
-    # final_file = os.path.join(CARPETA_DESCARGA, file_name)
-
-    # for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
-    #    print(f"📂 Contenido actual 2 de CARPETA_DESCARGA {f}:")
 
     data = request.get_json()
     url = data.get("url").split("?")[0]
@@ -173,6 +158,19 @@ def descargax():
     # final_name = contador+"."+extension
     final_name = f"{contador}.{extension}"
     final_file = os.path.join(CARPETA_DESCARGA, final_name)
+
+    # Generar nombre único
+    """counter = 1
+        while True:
+            final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
+            if not os.path.exists(final_file):
+                break
+            counter += 1"""
+
+    # uid = uuid.uuid4().hex
+    # file_name = f"{uid}.{extension}"
+    # final_file = os.path.join(CARPETA_DESCARGA, file_name)
+
     try:
         # Opciones de yt-dlp
         if download_type == "audio":
@@ -236,6 +234,10 @@ def descargax():
         print(b)
         for archivo in os.listdir(CARPETA_DESCARGA):
             print("aaa   ➜", archivo, end="\n")
+        print("$4$")    
+        for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
+            print(f"📂 Contenido actual 2 de CARPETA_DESCARGA {f}:")
+            print(f)
 
 @app2.route(
     "/server/<path:output_file>"
