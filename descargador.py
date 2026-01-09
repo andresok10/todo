@@ -114,12 +114,12 @@ def descargax():
         final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
 
         # Generar nombre único
-        '''counter = 1
+        counter = 1
         while True:
             final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
             if not os.path.exists(final_file):
                 break
-            counter += 1'''
+            counter += 1
         # Opciones de yt-dlp
         if download_type == "audio":
             ydl_opts = {
@@ -155,21 +155,22 @@ def descargax():
         # URL de descarga
         download_url = url_for(
             "descargas_ok.serve_download",
-            file=os.path.basename(final_file),
+            output_file=os.path.basename(final_file),
             _external=True,
             _scheme="https",
         )
-        #file_name = f"{counter}.{extension}"
-        file_name = f"1.{extension}"
-        print(file_name)
+        #final_name = f"{counter}.{extension}"
+        final_name = counter+"."+extension
+        #file_name = f"1.{extension}"
+        #print(file_name)
         mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
             "status": "success",
             #"msg": f"✅ {download_type.capitalize()} descargado con exito: {file_name}",
-            "msg": f"✅ Archivo descargado con exito: {file_name}",
+            "msg": f"✅ Archivo descargado con exito: {final_name}",
             "download_url": download_url,
             "extension": extension,
-            "file_name": file_name,
+            "file_name": final_name,
             "mime_type": mime_type
         })
 
@@ -179,10 +180,10 @@ def descargax():
         return jsonify({"status": "error", "msg": str(e)}), 500
         #return (jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}),500,)
 
-#@app2.route("/server/<path:output_file>") # Servir correctamente los archivos desde /downloads/
-#def serve_download(output_file): # Sirve los archivos descargados directamente
-#    return send_from_directory(CARPETA_DESCARGA, output_file, as_attachment=True)
+@app2.route("/server/<path:output_file>") # Servir correctamente los archivos desde /downloads/
+def serve_download(output_file): # Sirve los archivos descargados directamente
+    return send_from_directory(CARPETA_DESCARGA, output_file, as_attachment=True)
 
-@app2.route("/server/<path:file>") # Servir correctamente los archivos desde /downloads/
-def serve_download(file): # Sirve los archivos descargados directamente
-    return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
+#@app2.route("/server/<path:file>") # Servir correctamente los archivos desde /downloads/
+#def serve_download(file): # Sirve los archivos descargados directamente
+#    return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
