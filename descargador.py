@@ -113,10 +113,15 @@ def siguiente_contador(extension):
 
 @app2.route("/descarga", methods=["POST"])
 def descargax():
+    a=os.listdir(CARPETA_DESCARGA)
+    print(a)
+    b = [x for x in os.listdir(CARPETA_DESCARGA)]
+    print(b)
+    print("xxxxxx")
     for archivo in os.listdir(CARPETA_DESCARGA):
-        print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
-        ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
-        print(ruta_completa)
+        #print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
+        #ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
+        #print(ruta_completa)
         print("   ➜", archivo, end="\n")
         '''try:
             time.sleep(5)
