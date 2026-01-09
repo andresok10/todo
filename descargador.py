@@ -105,8 +105,7 @@ def descargax():
         data = request.get_json()
         url = data.get("url").split("?")[0]
         download_type = data.get("download_type", "video")
-        # extension = data.get("extension", "webm")  # ej: mp4, mkv, webm, avi, mp3...
-        extension = "m4a" if download_type == "audio" else "webm"
+        extension = "m4a" if download_type == "audio" else "webm" # ej: mp4, mkv, webm, avi, mp3...
 
         if not url:
             return jsonify({"status": "error", "msg": "No ingreso URL"}), 400
@@ -122,7 +121,6 @@ def descargax():
                 break
             counter += 1'''
         # Opciones de yt-dlp
-        # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
             ydl_opts = {
                 "format": "bestaudio/best",
@@ -161,7 +159,6 @@ def descargax():
             _external=True,
             _scheme="https",
         )
-        
         #file_name = f"{counter}.{extension}"
         file_name = f"1.{extension}"
         print(file_name)
@@ -182,32 +179,6 @@ def descargax():
         return jsonify({"status": "error", "msg": str(e)}), 500
         #return (jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}),500,)
 
-@app2.route("/server/<path:file>") # Servir correctamente los archivos desde /downloads/
-def serve_download(file): # Sirve los archivos descargados directamente
-    return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
-    #return send_from_directory(CARPETA_DESCARGA, os.path.basename(filename), as_attachment=True)
-
-"""Renombrar temporal a archivo final con contador
-#for f in glob.glob(os.path.join(carpeta, "temp.*")):
-#os.rename(f, final_file)#    os.rename(f, file)
-
-# Renombrar temporal a archivo final (solo si existe)
-temp_files = glob.glob(os.path.join(carpeta, "temp.*"))
-if not temp_files:
-raise FileNotFoundError("No se encontró archivo temporal descargado.")
-#os.rename(temp_files[0], final_file)
-os.rename(temp_files[0], file)
-
-## Si quieres habilitar descarga directa de archivos:
-# @app.route("/downloads/<path:filename>")
-# @app.route("/download/<path:output_file>")
-# def serve_download(filename):
-#    filename = os.path.basename(filename)
-# print(filename) # 1.webm
-# filename = os.path.join(BASE_DIR, os.path.basename(filename))
-# print(filename)
-# file_path = os.path.join(BASE_DIR, filename)
-
-# return send_from_directory(file_path, filename, as_attachment=True)
-# return send_from_directory("downloads", output_file, as_attachment=True)
-#    return send_from_directory(BASE_DIR, filename, as_attachment=True)"""
+@app2.route("/server/<path:output_file>") # Servir correctamente los archivos desde /downloads/
+def serve_download(output_file): # Sirve los archivos descargados directamente
+    return send_from_directory(CARPETA_DESCARGA, output_file, as_attachment=True)
