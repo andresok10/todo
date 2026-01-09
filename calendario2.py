@@ -20,11 +20,9 @@ class FormEdad(FlaskForm):
         validators=[DataRequired()]
     )
 
-
 class FormDescuento(FlaskForm):
     monto = DecimalField("Monto", validators=[DataRequired()])
     porc = DecimalField("Porcentaje", validators=[DataRequired()])
-
 
 # -------------------------
 # RUTA PRINCIPAL
@@ -32,13 +30,13 @@ class FormDescuento(FlaskForm):
 @app1.route("/", methods=["GET", "POST"])
 def calendario_app():
 
-    # ===== FECHA ACTUAL (TZ FIJA) =====
+    # ========= FECHA Y HORA ACTUAL =========
     ahora = pendulum.now("America/Guayaquil")
 
     f1 = FormEdad()
     f2 = FormDescuento()
 
-    # ===== MESES EN ESPAÑOL =====
+    # ========= MESES EN ESPAÑOL =========
     nombres = get_month_names("wide", locale="es_ES")
 
     meses = [
@@ -50,20 +48,14 @@ def calendario_app():
         for m in range(ahora.month, 13)
     ]
 
-    # ===== VARIABLES SIEMPRE DEFINIDAS =====
-    edad_anos = None
-    edad_meses = None
-    edad_dias = None
-
-    signo = ""
-    fn = ""
-    cumple = ""
-
-    diff_data = None
+    # ========= VARIABLES =========
+    edad = signo = cumple = fn = ""
+    faltan_dias = None
+    faltan_horas = None
     descuento = None
     msg = ""
-
-    # ===== EDAD / SIGNO / CUMPLEAÑOS =====
+    cumple_iso = ""
+    # ========= EDAD / SIGNO / CUMPLEAÑOS =========
     if f1.validate_on_submit() and f1.fecha.data:
         try:
             nacimiento = pendulum.from_format(
@@ -72,43 +64,26 @@ def calendario_app():
                 tz="America/Guayaquil"
             )
 
-            # ---- EDAD EXACTA ----
-            periodo = nacimiento.diff(ahora)
+            edad = nacimiento.diff(ahora).in_years()
 
-            edad_anos = periodo.years
-            edad_meses = periodo.months
-            edad_dias = periodo.remaining_days
+            cumple_d = nacimiento.replace(year=ahora.year,hour=0,minute=0,second=0)
+            cumple_d = cumple_d.replace(hour=0, minute=0, second=0)
 
-            # ---- PRÓXIMO CUMPLEAÑOS (00:00) ----
-            cumple_d = pendulum.datetime(
-                ahora.year,
-                nacimiento.month,
-                nacimiento.day,
-                0, 0, 0,
-                tz="America/Guayaquil"
-            )
-
-            if cumple_d <= ahora:
+            if cumple_d < ahora:
                 cumple_d = cumple_d.add(years=1)
 
-            diff = ahora.diff(cumple_d)
-
-            # ---- DATOS PARA JS (SEGUROS) ----
-            diff_data = {
-                "days": diff.in_days(),
-                "hours": diff.in_hours() % 24,
-                "minutes": diff.in_minutes() % 60,
-                "seconds": diff.in_seconds() % 60,
-            }
-
             signo = get_zodiac_sign(nacimiento.day, nacimiento.month)
+
             fn = nacimiento.format("DD/MM/YYYY")
             cumple = cumple_d.format("DD/MM/YYYY")
+
+            # 👉 FECHA ISO PARA JS
+            cumple_iso = cumple_d.to_iso8601_string()
 
         except Exception:
             msg = "Fecha inválida. Formato correcto: DD/MM/YYYY"
 
-    # ===== DESCUENTO =====
+    # ========= DESCUENTO =========
     if f2.validate_on_submit() and f2.monto.data and f2.porc.data:
         try:
             descuento = float(f2.monto.data) * (1 - float(f2.porc.data) / 100)
@@ -119,13 +94,15 @@ def calendario_app():
         "app.html",
         ahora=ahora,
         meses=meses,
-        edad_anos=edad_anos,
-        edad_meses=edad_meses,
-        edad_dias=edad_dias,
+        edad=edad,
         signo=signo,
         fn=fn,
         cumple=cumple,
-        diff_data=diff_data,
+        #cumple_iso=cumple_iso if cumple else None,
+        #cumple=cumple_d.format("DD/MM/YYYY"),
+        cumple_iso=cumple_iso,
+        faltan_dias=faltan_dias,
+        faltan_horas=faltan_horas,
         descuento=descuento,
         msg=msg,
         f1=f1,

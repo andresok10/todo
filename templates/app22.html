@@ -70,7 +70,7 @@
         }
 
         .form-section {
-            max-width: 420px;
+            max-width: 400px;
             margin: 30px auto;
             background: #fff;
             padding: 20px;
@@ -171,12 +171,8 @@
         <p class="error">{{ msg }}</p>
         {% endif %}
 
-        {% if edad_anos is not none %}
-        <p class="resultado">
-            Edad: {{ edad_anos }} años,
-            {{ edad_meses }} meses,
-            {{ edad_dias }} días
-        </p>
+        {% if edad %}
+        <p class="resultado">Edad: {{ edad }}</p>
         {% endif %}
 
         {% if signo %}
@@ -184,19 +180,21 @@
         {% endif %}
 
         {% if fn %}
-        <p class="resultado">Nacimiento: {{ fn }}</p>
+        <p class="resultado">F. Nac: {{ fn }}</p>
         {% endif %}
 
         {% if cumple %}
         <p class="resultado">Próximo cumpleaños: {{ cumple }}</p>
         {% endif %}
 
-        {% if diff_data %}
+        {% if cumple_iso %}
         <p class="resultado">
-            Falta:
-            <span id="contador" class="contador"></span>
+            Próximo cumpleaños en:
+            <span id="contador">calculando…</span>
         </p>
         {% endif %}
+
+
     </div>
 
     <!-- ===== descuento ===== -->
@@ -217,44 +215,35 @@
         {% endif %}
     </div>
 
-    {% if diff_data %}
+    {% if cumple_iso %}
     <script>
-        let tiempo = {{ diff_data | tojson | safe }};
-        const contador = document.getElementById("contador");
+        const cumpleISO = "{{ cumple_iso }}";
+        const cumple = new Date(cumpleISO);
 
-        function actualizar() {
-            if (!contador) return;
+        function actualizarContador() {
+            const ahora = new Date();
+            let diff = cumple - ahora;
 
-            contador.innerText =
-                `${tiempo.days}d ${tiempo.hours}h ${tiempo.minutes}m ${tiempo.seconds}s`;
-
-            tiempo.seconds--;
-
-            if (tiempo.seconds < 0) {
-                tiempo.seconds = 59;
-                tiempo.minutes--;
-
-                if (tiempo.minutes < 0) {
-                    tiempo.minutes = 59;
-                    tiempo.hours--;
-
-                    if (tiempo.hours < 0) {
-                        tiempo.hours = 23;
-                        tiempo.days--;
-
-                        if (tiempo.days < 0) {
-                            contador.innerText = "¡Feliz cumpleaños!";
-                            clearInterval(timer);
-                        }
-                    }
-                }
+            if (diff <= 0) {
+                document.getElementById("contador").innerText = "¡Feliz cumpleaños! 🎉";
+                return;
             }
+
+            const totalSeg = Math.floor(diff / 1000);
+            const dias = Math.floor(totalSeg / 86400);
+            const horas = Math.floor((totalSeg % 86400) / 3600);
+            const minutos = Math.floor((totalSeg % 3600) / 60);
+            const segundos = totalSeg % 60;
+
+            document.getElementById("contador").innerText =
+                `${dias}d ${horas}h ${minutos}m ${segundos}s`;
         }
 
-        actualizar();
-        const timer = setInterval(actualizar, 1000);
+        actualizarContador();
+        setInterval(actualizarContador, 1000);
     </script>
     {% endif %}
+
 
 </body>
 
