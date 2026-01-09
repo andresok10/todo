@@ -140,7 +140,7 @@ def descargax():
 
     try:
         data = request.get_json()
-        #url = data.get("url").split("?")[0]
+        url = data.get("url").split("?")[0]
         download_type = data.get("download_type", "video")
         extension = "m4a" if download_type == "audio" else "webm" # ej: mp4, mkv, webm, avi, mp3...
 
@@ -195,9 +195,10 @@ def descargax():
         # download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
         # download_url = url_for("descargax", file=file_basename, _external=True, _scheme="https")
         # URL de descarga
+        #output_file=os.path.basename(final_file),
         download_url = url_for(
             "descargas_ok.serve_download",
-            output_file=os.path.basename(final_file),
+            output_file=final_name,
             _external=True,
             _scheme="https",
         )
