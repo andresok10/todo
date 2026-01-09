@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, url_for, send_from_directory, current_app
-from yt_dlp import YoutubeDL  # pip install yt-dlp
+from yt_dlp import YoutubeDL
 import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform
 import glob
 from pathlib import Path
@@ -77,16 +77,7 @@ if not os.path.exists(BASE_DIR+"/ffmpeg"):
 
 @app2.route("/descarga", methods=["POST"])
 def descargax():
-    for archivo in os.listdir(CARPETA_DESCARGA):
-        print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
-        ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
-        print(ruta_completa)
-        print("   ➜", archivo, end="\n")
-        '''try:
-            os.remove(ruta_completa)
-            print(f"archivo eliminado {archivo}")
-        except Exception as exep:
-            print(f"no se pudo eliminar {archivo}: {exep}")'''
+    
 
     print("#############################################")
 
@@ -116,9 +107,7 @@ def descargax():
         # Generar nombre único
         counter = 1
         while True:
-            #file = f"{BASE_DIR}/descarga/{counter}.{extension}"
             final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
-            # file = f"{BASE_DIR}/descarga/{counter}"
             if not os.path.exists(final_file):
                 break
             counter += 1
@@ -150,9 +139,7 @@ def descargax():
                 #'postprocessor_args': ['-c', 'copy', '-strict', '-2']
             }
 
-        # Descargar
-        with YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+        YoutubeDL(ydl_opts).download([url])
 
         # ✅ Construir URL con HTTPS para evitar el error CLEARTEXT
         # download_url = url_for("serve_download", file=file_basename, _external=True, _scheme="https")
@@ -184,6 +171,16 @@ def descargax():
 
 @app2.route("/server/<path:file>") # Servir correctamente los archivos desde /downloads/
 def serve_download(file): # Sirve los archivos descargados directamente
+    for archivo in os.listdir(CARPETA_DESCARGA):
+        print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
+        ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
+        print(ruta_completa)
+        print("   ➜", archivo, end="\n")
+        try:
+            os.remove(ruta_completa)
+            print(f"✅ archivo eliminado {archivo}")
+        except Exception as exep:
+            print(f"❌ no se pudo eliminar {archivo}: {exep}")
     return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
     #return send_from_directory(CARPETA_DESCARGA, os.path.basename(filename), as_attachment=True)
 
