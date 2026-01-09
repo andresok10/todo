@@ -219,7 +219,7 @@
 
     {% if diff_data %}
     <script>
-        let tiempo = {{ diff_data | tojson | safe }};
+        let tiempo = '{{ diff_data | tojson | safe }}';
         const contador = document.getElementById("contador");
 
         function actualizar() {
