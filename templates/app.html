@@ -217,6 +217,29 @@
         {% endif %}
     </div>
 
+    <!-- ================== DESCARGAS ================== -->
+    <div class="descarga-container" id="descargar-form">
+        <h2>Descargar Video o Audio</h2>
+        <!--<form method="POST" action="/descargar">      esto ya lo maneja ajax -->
+        <form>
+            <div class="form-group">
+                <label for="url">Ingresa la URL (YouTube, Facebook o TikTok):</label>
+                <input type="url" id="url" name="url" required placeholder="https://www.ejemplo.com/video">
+            </div>
+            <div class="form-group">
+                <label for="download_type">Tipo de descarga:</label>
+                <select id="download_type" name="download_type">
+                    <option value="video">Video</option>
+                    <option value="audio">Audio</option>
+                </select>
+            </div>
+            <button type="submit">Descargar</button>
+        </form>
+
+        <div id="resultado-msg"></div>
+        <!-- Div donde se mostrará el mensaje -->
+    </div>
+
     {% if diff_data %}
     <script>
         // parse the JSON payload as a string to ensure a valid JS declaration in the template
@@ -256,6 +279,57 @@
         const timer = setInterval(actualizar, 1000);
     </script>
     {% endif %}
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function () { // scroll al formulario
+                const formBox = document.getElementById("descargar-form");
+                if (formBox) {
+                    formBox.scrollIntoView({behavior: "smooth", block: "center"});
+                }
+
+                const form = document.querySelector("#descargar-form form");
+                const msgDiv = document.getElementById("resultado-msg");
+
+                form.addEventListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    msgDiv.innerHTML = "Procesando descarga…";
+
+                    const payload = {
+                        url: document.getElementById("url").value,
+                        download_type: document.getElementById("download_type").value
+                    };
+
+                    try {
+                        const resp = await fetch("/descarga", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const data = await resp.json();
+
+                        msgDiv.innerHTML = `<div class="alert ${
+                            data.status
+                        }">${
+                            data.msg
+                        }</div>`;
+                        msgDiv.scrollIntoView({behavior: "smooth", block: "center"});
+
+                        // descargar automáticamente
+                        if (data.status === "success" && data.download_url) {
+                            window.location.href = data.download_url;
+                        }
+
+                    } catch (err) {
+                        msgDiv.innerHTML = `<div class="alert error">Error en la petición</div>`;
+                    }
+                });
+
+            });
+        </script>
 
 </body>
 
