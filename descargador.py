@@ -78,7 +78,7 @@ if not os.path.exists(BASE_DIR + "/ffmpeg"):
     else:
         raise Exception("❌ Sistema operativo no soportado")
 ##################################################
-MAX_ARCHIVOS = 2  # conserva solo los últimos N archivos
+MAX_ARCHIVOS = -1  # conserva solo los últimos N archivos
 def limpiar_por_contador(extension): #Elimina archivos 1.ext, 2.ext, ...dejando solo los últimos MAX_ARCHIVOS
     numeros = []
 
