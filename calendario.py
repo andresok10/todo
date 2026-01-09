@@ -75,7 +75,7 @@ def calendario_app():
             signo = get_zodiac_sign(nacimiento.day, nacimiento.month)
 
             fn = nacimiento.format("DD/MM/YYYY")
-            #cumple = cumple_d.format("DD/MM/YYYY")
+            cumple = cumple_d.format("DD/MM/YYYY")
 
             # 👉 FECHA ISO PARA JS
             cumple_iso = cumple_d.to_iso8601_string()
