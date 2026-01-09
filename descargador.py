@@ -138,11 +138,6 @@ def descargax():
             print(f"no se pudo eliminar {f}: {exep}")"""
         
     # Generar nombre único
-    limpiar_por_contador(extension)
-    contador = siguiente_contador(extension)
-    #final_name = contador+"."+extension
-    final_name = f"{contador}.{extension}"
-    final_file = os.path.join(CARPETA_DESCARGA, final_name)
     '''counter = 1
         while True:
             final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
@@ -167,6 +162,11 @@ def descargax():
 
         # Archivo final siempre será "1.extension"
         #final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
+        limpiar_por_contador(extension)
+        contador = siguiente_contador(extension)
+        #final_name = contador+"."+extension
+        final_name = f"{contador}.{extension}"
+        final_file = os.path.join(CARPETA_DESCARGA, final_name)
 
         # Opciones de yt-dlp
         if download_type == "audio":
