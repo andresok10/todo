@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, url_for, send_from_directory, current_app
 from yt_dlp import YoutubeDL
-import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform,time
+import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform,time, uuid
 import glob
 from pathlib import Path
 
@@ -76,7 +76,7 @@ if not os.path.exists(BASE_DIR+"/ffmpeg"):
 ##################################################
 
 # ===================== UTILIDADES =====================
-MAX_ARCHIVOS = 1  # conserva solo los últimos N archivos
+MAX_ARCHIVOS = 2  # conserva solo los últimos N archivos
 def limpiar_por_contador(extension):
     """
     Elimina archivos 1.ext, 2.ext, ...
@@ -153,7 +153,7 @@ def descargax():
         limpiar_por_contador(extension)
         contador = siguiente_contador(extension)
         #final_name = contador+"."+extension
-        final_name = f"{contador}/{extension}"
+        final_name = f"{contador}.{extension}"
         final_file = os.path.join(CARPETA_DESCARGA, final_name)
         '''counter = 1
         while True:
@@ -161,6 +161,11 @@ def descargax():
             if not os.path.exists(final_file):
                 break
             counter += 1'''
+        
+        #uid = uuid.uuid4().hex
+        #file_name = f"{uid}.{extension}"
+        #final_file = os.path.join(CARPETA_DESCARGA, file_name)
+
         # Opciones de yt-dlp
         if download_type == "audio":
             ydl_opts = {
