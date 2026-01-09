@@ -179,6 +179,10 @@ def descargax():
         return jsonify({"status": "error", "msg": str(e)}), 500
         #return (jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}),500,)
 
-@app2.route("/server/<path:output_file>") # Servir correctamente los archivos desde /downloads/
-def serve_download(output_file): # Sirve los archivos descargados directamente
-    return send_from_directory(CARPETA_DESCARGA, output_file, as_attachment=True)
+#@app2.route("/server/<path:output_file>") # Servir correctamente los archivos desde /downloads/
+#def serve_download(output_file): # Sirve los archivos descargados directamente
+#    return send_from_directory(CARPETA_DESCARGA, output_file, as_attachment=True)
+
+@app2.route("/server/<path:file>") # Servir correctamente los archivos desde /downloads/
+def serve_download(file): # Sirve los archivos descargados directamente
+    return send_from_directory(CARPETA_DESCARGA, file, as_attachment=True)
