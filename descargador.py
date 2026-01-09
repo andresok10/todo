@@ -114,15 +114,12 @@ def descargax():
     print("comienzo.")
     a = os.listdir(BASE_DIR)
     print(a)
-    FFMPEG_PATH2 = os.path.join(BASE_DIR, "ffmpeg")
-    a = os.listdir(FFMPEG_PATH2)
-    print(a)
     a = os.listdir(CARPETA_DESCARGA)
     print(a)
-    #b = [x for x in os.listdir(CARPETA_DESCARGA)]
-    #print(b)
+    b = [x for x in os.listdir(CARPETA_DESCARGA)]
+    print(b)
     for archivo in os.listdir(CARPETA_DESCARGA):
-        print("aaa   ➜", archivo, end="\n")
+        print("   ➜", archivo, end="\n")
         """try:
             time.sleep(5)
             os.remove(ruta_completa)
