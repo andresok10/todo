@@ -118,8 +118,8 @@ def descargax():
     print("Descarga finalizada.")
     a = os.listdir(BASE_DIR)
     print(a)
-    a = os.listdir(FFMPEG_PATH)
-    print(a)
+    #a = os.listdir(FFMPEG_PATH)
+    #print(a)
     a = os.listdir(CARPETA_DESCARGA)
     print(a)
     #b = [x for x in os.listdir(CARPETA_DESCARGA)]
@@ -234,8 +234,8 @@ def descargax():
         print("Descarga finalizada.")
         a = os.listdir(BASE_DIR)
         print(a)
-        a = os.listdir(FFMPEG_PATH)
-        print(a)
+        #a = os.listdir(FFMPEG_PATH)
+        #print(a)
         a = os.listdir(CARPETA_DESCARGA)
         print(a)
         #b = [x for x in os.listdir(CARPETA_DESCARGA)]
