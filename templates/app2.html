@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Calendario y Calculadora</title>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background: #f4f6f9;
+                color: #333
+            }
+
+            h4 {
+                text-align: center;
+                margin-top: 20px
+            }
+
+            .calendario-contenedor {
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+                padding: 10px
+            }
+
+            .calendario-mes {
+                min-width: 200px;
+                background: white;
+                border-radius: 8px;
+                padding: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                flex-shrink: 0
+            }
+
+            .calendario-mes h3 {
+                text-align: center;
+                font-size: 14px;
+                margin-bottom: 5px
+            }
+
+            .calendario-mes table {
+                width: 100%;
+                border-collapse: collapse;
+                text-align: center;
+                font-size: 11px
+            }
+
+            .calendario-mes th {
+                background: #007bff;
+                color: white;
+                padding: 3px;
+                font-size: 10px
+            }
+
+            .calendario-mes td {
+                padding: 3px;
+                height: 20px
+            }
+
+            .calendario-mes .hoy {
+                background: #ff5722;
+                color: white;
+                border-radius: 50%;
+                font-weight: bold
+            }
+
+            .form-section {
+                max-width: 400px;
+                margin: 30px auto;
+                background: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1)
+            }
+
+            .form-section input,
+            .form-section button {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 14px;
+                border-radius: 6px;
+                border: 1px solid #ccc
+            }
+
+            .form-section button {
+                background: #007bff;
+                color: white;
+                border: none;
+                cursor: pointer
+            }
+
+            .form-section button:hover {
+                background: #0056b3
+            }
+
+            .resultado {
+                font-weight: bold;
+                text-align: center;
+                margin-top: 5px
+            }
+
+            .error {
+                color: #c00;
+                text-align: center
+            }
+
+            /*================== ESTILOS DESCARGA ==================*/
+            .descarga-container {
+                max-width: 500px;
+                margin: 40px auto;
+                background: #fff;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .descarga-container h2 {
+                text-align: center;
+                margin-bottom: 20px;
+                font-size: 1.6rem;
+                color: #222;
+            }
+
+            .descarga-container label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 6px;
+            }
+
+            .descarga-container input,
+            .descarga-container select {
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 18px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                font-size: 1rem;
+                transition: border-color 0.3s;
+            }
+
+            .descarga-container input:focus,
+            .descarga-container select:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+
+            .descarga-container button {
+                width: 100%;
+                padding: 14px;
+                background: #007bff;
+                color: #fff;
+                font-size: 1rem;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+
+            .descarga-container button:hover {
+                background: #0056b3;
+            }
+
+            .descarga-container .alert {
+                padding: 12px;
+                border-radius: 6px;
+                margin-top: 15px;
+                font-size: 0.95rem;
+            }
+
+            .descarga-container .alert-success {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .descarga-container .alert-danger {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .descarga-container .alert-warning {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .descarga-container .alert-info {
+                background: #d1ecf1;
+                color: #0c5460;
+            }
+
+            .alert.success {
+                color: green;
+                font-weight: bold;
+            }
+
+            .alert.error {
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <h4>Calendario
+            {{ hoy.year }}</h4>
+
+        <div class="calendario-contenedor">
+            {% for mes in meses %}
+                <div class="calendario-mes">
+                    <h3>{{ mes.nombre }}</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>L</th>
+                                <th>M</th>
+                                <th>MI</th>
+                                <th>J</th>
+                                <th>V</th>
+                                <th>S</th>
+                                <th>D</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for semana in mes.semanas %}
+                                <tr>
+                                    {% for dia in semana %}
+                                        {% if dia == 0 %}
+                                            <td></td>
+                                        {% elif dia == hoy.day and mes.mes_numero == hoy.month %}
+                                            <td class="hoy">{{ dia }}</td>
+                                        {% else %}
+                                            <td>{{ dia }}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- ===== edad y signo ===== -->
+        <div class="form-section" id="edad">
+            <h4>Calcular Edad y Signo Zodiacal</h4>
+
+            <form method="POST" action="#edad">
+                {{ f1.hidden_tag() }}
+
+                {{ f1.fecha(class="input", placeholder="dd/mm/aaaa") }}
+
+                <button type="submit">Calcular</button>
+            </form>
+
+            {% if msg %}
+                <p class="error">{{ msg }}</p>
+            {% endif %}
+            {% if edad %}
+                <p class="resultado">Edad:
+                    {{ edad }}</p>
+            {% endif %}
+            {% if signo %}
+                <p class="resultado">Signo:
+                    {{ signo }}</p>
+            {% endif %}
+            {% if fn %}
+                <p class="resultado">F. Nac:
+                    {{ fn }}</p>
+            {% endif %}
+            {% if cumple %}
+                <p class="resultado">Cumpleaños:
+                    {{ cumple }}</p>
+            {% endif %}
+            {% if faltan is not none %}
+                <p class="resultado">Faltan
+                    {{ faltan }}
+                    días</p>
+            {% endif %}
+        </div>
+
+        <!-- ===== descuento ===== -->
+        <div class="form-section" id="descuento">
+            <h4>Calcular Descuento</h4>
+
+            <form method="POST" action="#descuento">
+                {{ f2.hidden_tag() }}
+
+                {{ f2.monto(step="0.01", placeholder="Monto") }}
+                {{ f2.porc(step="0.01", placeholder="Porcentaje %") }}
+
+                <button type="submit">Calcular</button>
+            </form>
+
+            {% if descuento is not none %}
+                <p class="resultado">Total con descuento:
+                    {{ "%.2f"|format(descuento) }}</p>
+            {% endif %}
+        </div>
+
+
+        <!-- ================== DESCARGAS ================== -->
+        <div class="descarga-container" id="descargar-form">
+            <h2>Descargar Video o Audio</h2>
+            <!--<form method="POST" action="/descargar">      esto ya lo maneja ajax -->
+            <form>
+                <div class="form-group">
+                    <label for="url">Ingresa la URL (YouTube, Facebook o TikTok):</label>
+                    <input type="url" id="url" name="url" required placeholder="https://www.ejemplo.com/video">
+                </div>
+                <div class="form-group">
+                    <label for="download_type">Tipo de descarga:</label>
+                    <select id="download_type" name="download_type">
+                        <option value="video">Video</option>
+                        <option value="audio">Audio</option>
+                    </select>
+                </div>
+                <button type="submit">Descargar</button>
+            </form>
+
+            <div id="resultado-msg"></div>
+            <!-- Div donde se mostrará el mensaje -->
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () { // scroll al formulario
+                const formBox = document.getElementById("descargar-form");
+                if (formBox) {
+                    formBox.scrollIntoView({behavior: "smooth", block: "center"});
+                }
+
+                const form = document.querySelector("#descargar-form form");
+                const msgDiv = document.getElementById("resultado-msg");
+
+                form.addEventListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    msgDiv.innerHTML = "Procesando descarga…";
+
+                    const payload = {
+                        url: document.getElementById("url").value,
+                        download_type: document.getElementById("download_type").value
+                    };
+
+                    try {
+                        const resp = await fetch("/descarga", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const data = await resp.json();
+
+                        msgDiv.innerHTML = `<div class="alert ${
+                            data.status
+                        }">${
+                            data.msg
+                        }</div>`;
+                        msgDiv.scrollIntoView({behavior: "smooth", block: "center"});
+
+                        // descargar automáticamente
+                        if (data.status === "success" && data.download_url) {
+                            window.location.href = data.download_url;
+                        }
+
+                    } catch (err) {
+                        msgDiv.innerHTML = `<div class="alert error">Error en la petición</div>`;
+                    }
+                });
+
+            });
+        </script>
+
+    </body>
+
+</html>

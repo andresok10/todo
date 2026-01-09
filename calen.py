@@ -1,51 +1,43 @@
 import calendar
-
 from flask import Blueprint, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, DecimalField
 from wtforms.validators import DataRequired
-
 import pendulum
 from babel.dates import get_month_names
 from zodiac_sign import get_zodiac_sign
 
 app1 = Blueprint("calendario", __name__)
 
-# -------------------------
-# FORMULARIOS
-# -------------------------
 class FormEdad(FlaskForm):
-    fecha = StringField(
-        "Fecha de nacimiento (DD/MM/YYYY)",
-        validators=[DataRequired()]
-    )
+    fecha = StringField("Fecha de nacimiento (DD/MM/YYYY)",validators=[DataRequired()])
 
 class FormDescuento(FlaskForm):
     monto = DecimalField("Monto", validators=[DataRequired()])
     porc = DecimalField("Porcentaje", validators=[DataRequired()])
 
-# -------------------------
-# RUTA PRINCIPAL
-# -------------------------
 @app1.route("/", methods=["GET", "POST"])
 def calendario_app():
-
-    # ========= FECHA Y HORA ACTUAL =========
-    ahora = pendulum.now("America/Guayaquil")
+    # ========= FECHA ACTUAL (SIN GOOGLE API) =========
+    hoy = pendulum.today("America/Guayaquil") # no maneja horas
+    #hoy = pendulum.now("America/Guayaquil") # si maneja horas
 
     f1 = FormEdad()
     f2 = FormDescuento()
 
     # ========= MESES EN ESPAÑOL =========
+    #try:
     nombres = get_month_names("wide", locale="es_ES")
+    #except Exception:
+    #    nombres = get_month_names("wide", locale="es")
 
     meses = [
         {
             "nombre": nombres[m],
             "mes_numero": m,
-            "semanas": calendar.Calendar().monthdayscalendar(ahora.year, m),
+            "semanas": calendar.Calendar().monthdayscalendar(hoy.year, m),
         }
-        for m in range(ahora.month, 13)
+        for m in range(hoy.month, 13)
     ]
 
     # ========= VARIABLES =========
@@ -55,38 +47,23 @@ def calendario_app():
     descuento = None
     msg = ""
 
-    # ========= EDAD / SIGNO / CUMPLEAÑOS =========
+    # ========= EDAD / SIGNO =========
     if f1.validate_on_submit() and f1.fecha.data:
         try:
-            nacimiento = pendulum.from_format(
-                f1.fecha.data.strip(),
-                "DD/MM/YYYY",
-                tz="America/Guayaquil"
-            )
+            nacimiento = pendulum.from_format(f1.fecha.data.strip(),"DD/MM/YYYY",tz="America/Guayaquil").date()
 
-            # Edad
-            edad = nacimiento.diff(ahora).in_years()
+            edad = nacimiento.diff(hoy).in_years()
 
-            # Próximo cumpleaños a las 00:00
-            cumple_d = pendulum.datetime(
-                ahora.year,
-                nacimiento.month,
-                nacimiento.day,
-                0, 0, 0,
-                tz="America/Guayaquil"
-            )
-
-            if cumple_d <= ahora:
+            cumple_d = nacimiento.replace(year=hoy.year)
+            if cumple_d < hoy:
                 cumple_d = cumple_d.add(years=1)
 
-            diff = ahora.diff(cumple_d)
-            faltan_dias = diff.in_days()
-            faltan_horas = diff.in_hours()
+            faltan = hoy.diff(cumple_d).in_days()
 
             signo = get_zodiac_sign(nacimiento.day, nacimiento.month)
 
             fn = nacimiento.format("DD/MM/YYYY")
-            cumple = cumple_d.format("DD/MM/YYYY HH:mm")
+            cumple = cumple_d.format("DD/MM/YYYY")
 
         except Exception:
             msg = "Fecha inválida. Formato correcto: DD/MM/YYYY"
@@ -100,14 +77,13 @@ def calendario_app():
 
     return render_template(
         "app.html",
-        ahora=ahora,
+        hoy=hoy,
         meses=meses,
         edad=edad,
         signo=signo,
         fn=fn,
         cumple=cumple,
-        faltan_dias=faltan_dias,
-        faltan_horas=faltan_horas,
+        faltan=faltan,
         descuento=descuento,
         msg=msg,
         f1=f1,
