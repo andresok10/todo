@@ -92,11 +92,9 @@ def calendario_app():
     # ========= EDAD / SIGNO =========
     if f1.validate_on_submit() and f1.fecha.data:
         try:
-            nacimiento = pendulum.from_format(
-                f1.fecha.data.strip(), "DD/MM/YYYY", tz=timezone
-            )
+            nacimiento = pendulum.from_format(f1.fecha.data.strip(),"DD/MM/YYYY",tz=timezone).date()   # 👈 convertir a Date
 
-            edad = hoy.diff(nacimiento).in_years()
+            edad = nacimiento.diff(hoy).in_years()
 
             cumple_d = nacimiento.replace(year=hoy.year)
             if cumple_d < hoy:
@@ -133,3 +131,15 @@ def calendario_app():
         f1=f1,
         f2=f2,
     )
+    
+"""nacimiento = pendulum.from_format(
+                f1.fecha.data.strip(), "DD/MM/YYYY", tz=timezone
+            )
+
+            edad = hoy.diff(nacimiento).in_years()
+
+            cumple_d = nacimiento.replace(year=hoy.year)
+            if cumple_d < hoy:
+                cumple_d = cumple_d.add(years=1)
+
+            faltan = hoy.diff(cumple_d).in_days()"""
