@@ -66,12 +66,7 @@ def calendario_app():
 
             edad = nacimiento.diff(ahora).in_years()
 
-            '''cumple_d = nacimiento.replace(
-                year=ahora.year,
-                hour=0,
-                minute=0,
-                second=0
-            )'''
+            cumple_d = nacimiento.replace(year=ahora.year,hour=0,minute=0,second=0)
             cumple_d = cumple_d.replace(hour=0, minute=0, second=0)
 
             cumple_iso = cumple_d.to_iso8601_string()
