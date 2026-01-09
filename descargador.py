@@ -114,8 +114,9 @@ def descargax():
     print("comienzo.")
     a = os.listdir(BASE_DIR)
     print(a)
-    #a = os.listdir(FFMPEG_PATH)
-    #print(a)
+    FFMPEG_PATH2 = os.path.join(BASE_DIR, "ffmpeg")
+    a = os.listdir(FFMPEG_PATH2)
+    print(a)
     a = os.listdir(CARPETA_DESCARGA)
     print(a)
     #b = [x for x in os.listdir(CARPETA_DESCARGA)]
