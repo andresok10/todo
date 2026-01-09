@@ -219,7 +219,8 @@
 
     {% if diff_data %}
     <script>
-        let tiempo = '{{ diff_data | tojson | safe }}';
+        // parse the JSON payload as a string to ensure a valid JS declaration in the template
+        const tiempo = JSON.parse('{{ diff_data | tojson | safe }}');
         const contador = document.getElementById("contador");
 
         function actualizar() {

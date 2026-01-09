@@ -1,5 +1,4 @@
 import calendar
-
 from flask import Blueprint, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, DecimalField
@@ -51,9 +50,10 @@ def calendario_app():
     ]
 
     # ===== VARIABLES SIEMPRE DEFINIDAS =====
-    edad_anos = None
-    edad_meses = None
-    edad_dias = None
+    edad_anos, edad_meses, edad_dias = None
+    #edad_anos = None
+    #edad_meses = None
+    #edad_dias = None
 
     signo = ""
     fn = ""
