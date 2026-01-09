@@ -115,13 +115,17 @@ def siguiente_contador(extension):
 
 @app2.route("/descarga", methods=["POST"])
 def descargax():
+    print("Descarga finalizada.")
+    a = os.listdir(BASE_DIR)
+    print(a)
+    a = os.listdir(FFMPEG_PATH)
+    print(a)
     a = os.listdir(CARPETA_DESCARGA)
     print(a)
-    b = [x for x in os.listdir(CARPETA_DESCARGA)]
-    print(b)
+    #b = [x for x in os.listdir(CARPETA_DESCARGA)]
+    #print(b)
     for archivo in os.listdir(CARPETA_DESCARGA):
-        #print(archivo)
-        print("   ➜", archivo, end="\n")
+        print("aaa   ➜", archivo, end="\n")
         """try:
             time.sleep(5)
             os.remove(ruta_completa)
@@ -228,10 +232,14 @@ def descargax():
         # return (jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}),500,)
     finally:
         print("Descarga finalizada.")
+        a = os.listdir(BASE_DIR)
+        print(a)
+        a = os.listdir(FFMPEG_PATH)
+        print(a)
         a = os.listdir(CARPETA_DESCARGA)
         print(a)
-        b = [x for x in os.listdir(CARPETA_DESCARGA)]
-        print(b)
+        #b = [x for x in os.listdir(CARPETA_DESCARGA)]
+        #print(b)
         for archivo in os.listdir(CARPETA_DESCARGA):
             print("aaa   ➜", archivo, end="\n")
         print("$4$")    
