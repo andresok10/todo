@@ -6,21 +6,34 @@ from pathlib import Path
 
 app2 = Blueprint("descargas_ok", __name__)
 
-ffmpeg_dir = os.path.dirname(os.path.abspath(__file__)) #/opt/render/project/src
+# BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) ##/opt/render/project/src
+CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
+os.makedirs(CARPETA_DESCARGA, exist_ok=True)
+
+# FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
+FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
+
+print(BASE_DIR)
+print(CARPETA_DESCARGA)
+print(FFMPEG_PATH)
+
+# carpeta = os.path.join(BASE_DIR, "descarga")
+# carpeta = "/opt/render/project/src/descarga"
 
 is_linux = platform.system().lower().startswith("linux") # Detectar sistema operativo == true
 
-if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
+if not os.path.exists(BASE_DIR+"/ffmpeg"):
     print("FFmpeg no encontrado... Descargando...")
     ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
     if is_linux:
         url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-        archivo = ffmpeg_dir+"/ffmpeg.tar.xz" #/opt/render/project/src/ffmpeg.tar.xz
+        archivo = BASE_DIR+"/ffmpeg.tar.xz" #/opt/render/project/src/ffmpeg.tar.xz
         urllib.request.urlretrieve(url, archivo)
         with tarfile.open(archivo, "r:xz") as tar: #tarfile.open(archivo, "r:xz").extractall(ffmpeg_dir, filter="data")
             nombres = [m.name for m in tar.getmembers() if m.isdir()]
             print("Carpetas dentro del tar:", nombres)
-            tar.extractall(ffmpeg_dir, filter="data")
+            tar.extractall(BASE_DIR, filter="data")
             print("✅ Archivo Extraído")
         carpeta_extraida  = "ffmpeg-7.0.2-amd64-static"
 
@@ -40,8 +53,8 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
             print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")'''
         
-        if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
-            os.rename(ffmpeg_dir+"/"+carpeta_extraida, ffmpeg_dir+"/ffmpeg")
+        if not os.path.exists(BASE_DIR+"/ffmpeg"):
+            os.rename(BASE_DIR+"/"+carpeta_extraida, BASE_DIR+"/ffmpeg")
             print("✅ Carpeta renombrada a ffmpeg")
         else:
             print("ℹ️ Carpeta ffmpeg ya existe, no se renombró.")
@@ -56,25 +69,11 @@ if not os.path.exists(ffmpeg_dir+"/ffmpeg"):
         #    shutil.rmtree(carpeta_archivo_extraido)
 
         # Dar permisos de ejecución al binario
-        os.chmod(ffmpeg_dir+"/ffmpeg/ffmpeg", 0o755)  #os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
+        os.chmod(BASE_DIR+"/ffmpeg/ffmpeg", 0o755)  #os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
         # os.chmod(ffmpeg_bin, 0o755) # os.chmod(ffprobe_bin, 0o755)
     else:
         raise Exception("❌ Sistema operativo no soportado")
 ##################################################
-# BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CARPETA_DESCARGA = os.path.join(BASE_DIR, "descarga")
-os.makedirs(CARPETA_DESCARGA, exist_ok=True)
-
-# FFMPEG_PATH = f"{BASE_DIR}/ffmpeg/bin/ffmpeg.exe" # windows
-FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg/ffmpeg")
-
-print(BASE_DIR)
-print(CARPETA_DESCARGA)
-print(FFMPEG_PATH)
-
-# carpeta = os.path.join(BASE_DIR, "descarga")
-# carpeta = "/opt/render/project/src/descarga"
 
 @app2.route("/descarga", methods=["POST"])
 def descargax():
