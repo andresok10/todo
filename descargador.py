@@ -75,9 +75,46 @@ if not os.path.exists(BASE_DIR+"/ffmpeg"):
         raise Exception("❌ Sistema operativo no soportado")
 ##################################################
 
+# ===================== UTILIDADES =====================
+MAX_ARCHIVOS = 1  # conserva solo los últimos N archivos
+def limpiar_por_contador(extension):
+    """
+    Elimina archivos 1.ext, 2.ext, ...
+    dejando solo los últimos MAX_ARCHIVOS
+    """
+    numeros = []
+
+    for nombre in os.listdir(CARPETA_DESCARGA):
+        if nombre.endswith(f".{extension}"):
+            base = nombre.replace(f".{extension}", "")
+            if base.isdigit():
+                numeros.append(int(base))
+
+    if len(numeros) <= MAX_ARCHIVOS:
+        return
+    numeros.sort()
+    eliminar = numeros[:-MAX_ARCHIVOS]
+    for n in eliminar:
+        ruta = os.path.join(CARPETA_DESCARGA, f"{n}.{extension}")
+        try:
+            os.remove(ruta)
+            current_app.logger.info(f"🧹 Eliminado {n}.{extension}")
+        except Exception as e:
+            current_app.logger.warning(f"No se pudo eliminar {n}.{extension}: {e}")
+
+def siguiente_contador(extension):
+    numeros = []
+    for nombre in os.listdir(CARPETA_DESCARGA):
+        if nombre.endswith(f".{extension}"):
+            base = nombre.replace(f".{extension}", "")
+            if base.isdigit():
+                numeros.append(int(base))
+    return max(numeros, default=0) + 1
+
 @app2.route("/descarga", methods=["POST"])
 def descargax():
-    for archivo in os.listdir(CARPETA_DESCARGA):
+    limpiar_por_contador()
+    '''for archivo in os.listdir(CARPETA_DESCARGA):
         print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
         ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
         print(ruta_completa)
@@ -87,7 +124,7 @@ def descargax():
             os.remove(ruta_completa)
             print(f"✅ archivo eliminado {archivo}")
         except Exception as exep:
-            print(f"❌ no se pudo eliminar {archivo}: {exep}")
+            print(f"❌ no se pudo eliminar {archivo}: {exep}")'''
 
     print("#############################################")
 
@@ -114,12 +151,17 @@ def descargax():
         #final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
 
         # Generar nombre único
-        counter = 1
+        limpiar_por_contador(extension)
+
+        contador = siguiente_contador(extension)
+        final_name = f"{contador}.{extension}"
+        final_file = os.path.join(CARPETA_DESCARGA, final_name)
+        '''counter = 1
         while True:
             final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
             if not os.path.exists(final_file):
                 break
-            counter += 1
+            counter += 1'''
         # Opciones de yt-dlp
         if download_type == "audio":
             ydl_opts = {
@@ -159,15 +201,12 @@ def descargax():
             _external=True,
             _scheme="https",
         )
-        #final_name = f"{counter}.{extension}"
-        final_name = counter+"."+extension
-        #file_name = f"1.{extension}"
-        #print(file_name)
+        #final_name = counter+"."+extension
+    
         mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
             "status": "success",
-            #"msg": f"✅ {download_type.capitalize()} descargado con exito: {file_name}",
-            "msg": f"✅ Archivo descargado con exito: {final_name}",
+            "msg": f"✅ {download_type} descargado con exito: {final_name}",
             "download_url": download_url,
             "extension": extension,
             "file_name": final_name,
