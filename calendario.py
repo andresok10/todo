@@ -64,6 +64,36 @@ def calendario_app():
                 tz="America/Guayaquil"
             )
 
+            edad = nacimiento.diff(ahora).in_years()
+
+            cumple_d = nacimiento.replace(
+                year=ahora.year,
+                hour=0,
+                minute=0,
+                second=0
+            )
+
+            if cumple_d < ahora:
+                cumple_d = cumple_d.add(years=1)
+
+            signo = get_zodiac_sign(nacimiento.day, nacimiento.month)
+
+            fn = nacimiento.format("DD/MM/YYYY")
+            cumple = cumple_d.format("DD/MM/YYYY")
+
+            # 👉 FECHA ISO PARA JS
+            cumple_iso = cumple_d.to_iso8601_string()
+
+        except Exception:
+            msg = "Fecha inválida. Formato correcto: DD/MM/YYYY"
+    '''if f1.validate_on_submit() and f1.fecha.data:
+        try:
+            nacimiento = pendulum.from_format(
+                f1.fecha.data.strip(),
+                "DD/MM/YYYY",
+                tz="America/Guayaquil"
+            )
+
             # Edad
             edad = nacimiento.diff(ahora).in_years()
 
@@ -89,7 +119,7 @@ def calendario_app():
             cumple = cumple_d.format("DD/MM/YYYY HH:mm")
 
         except Exception:
-            msg = "Fecha inválida. Formato correcto: DD/MM/YYYY"
+            msg = "Fecha inválida. Formato correcto: DD/MM/YYYY"'''
 
     # ========= DESCUENTO =========
     if f2.validate_on_submit() and f2.monto.data and f2.porc.data:
@@ -106,6 +136,7 @@ def calendario_app():
         signo=signo,
         fn=fn,
         cumple=cumple,
+        cumple_iso=cumple_iso if cumple else None,
         faltan_dias=faltan_dias,
         faltan_horas=faltan_horas,
         descuento=descuento,
