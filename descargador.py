@@ -109,8 +109,7 @@ def siguiente_contador(extension):
             base = nombre.replace(f".{extension}", "")
             if base.isdigit():
                 numeros.append(int(base))
-    #return max(numeros, default=0) + 1
-    return max(numeros, default=1) + 1
+    return max(numeros, default=0) + 1
 
 @app2.route("/descarga", methods=["POST"])
 def descargax():
@@ -212,6 +211,14 @@ def descargax():
             _external=True,
             _scheme="https",
         )
+
+        a=os.listdir(CARPETA_DESCARGA)
+        print(a)
+        b = [x for x in os.listdir(CARPETA_DESCARGA)]
+        print(b)
+        print("xxxxxx")
+        for archivo in os.listdir(CARPETA_DESCARGA):
+            print("aaa   ➜", archivo, end="\n")
     
         mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
