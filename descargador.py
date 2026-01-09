@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, url_for, send_from_directory, current_app
 from yt_dlp import YoutubeDL
-import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform
+import os, urllib.request, zipfile, tarfile, ssl, certifi, shutil, platform,time
 import glob
 from pathlib import Path
 
@@ -83,6 +83,7 @@ def descargax():
         print(ruta_completa)
         print("   ➜", archivo, end="\n")
         try:
+            time.sleep(5)
             os.remove(ruta_completa)
             print(f"✅ archivo eliminado {archivo}")
         except Exception as exep:
@@ -111,15 +112,15 @@ def descargax():
             return jsonify({"status": "error", "msg": "No ingreso URL"}), 400
 
         # Archivo final siempre será "1.extension"
-        #final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
+        final_file = os.path.join(CARPETA_DESCARGA, f"1.{extension}")
 
         # Generar nombre único
-        counter = 1
+        '''counter = 1
         while True:
             final_file = f"{CARPETA_DESCARGA}/{counter}.{extension}"
             if not os.path.exists(final_file):
                 break
-            #counter += 1
+            counter += 1'''
         # Opciones de yt-dlp
         # "format": "bestaudio/best" if download_type == "audio" else "best", "bestvideo+bestaudio/best",
         if download_type == "audio":
@@ -161,12 +162,14 @@ def descargax():
             _scheme="https",
         )
         
-        file_name = f"{counter}.{extension}"
+        #file_name = f"{counter}.{extension}"
+        file_name = f"1.{extension}"
         print(file_name)
         mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
             "status": "success",
-            "msg": f"✅ {download_type.capitalize()} descargado con exito: {file_name}",
+            #"msg": f"✅ {download_type.capitalize()} descargado con exito: {file_name}",
+            "msg": f"✅ Archivo descargado con exito: {file_name}",
             "download_url": download_url,
             "extension": extension,
             "file_name": file_name,
