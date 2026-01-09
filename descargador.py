@@ -236,7 +236,6 @@ def descargax():
             print("aaa   ➜", archivo, end="\n")
         print("$4$")    
         for f in glob.glob(os.path.join(CARPETA_DESCARGA, "*")):
-            print(f"📂 Contenido actual 2 de CARPETA_DESCARGA {f}:")
             print(f)
 
 @app2.route(
