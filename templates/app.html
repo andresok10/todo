@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -118,121 +119,138 @@
 
 <body>
 
-<h4>Calendario {{ ahora.year }}</h4>
+    <h4>Calendario {{ ahora.year }}</h4>
 
-<div class="calendario-contenedor">
-    {% for mes in meses %}
-    <div class="calendario-mes">
-        <h3>{{ mes.nombre }}</h3>
-        <table>
-            <thead>
-            <tr>
-                <th>L</th><th>M</th><th>MI</th><th>J</th><th>V</th><th>S</th><th>D</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for semana in mes.semanas %}
-            <tr>
-                {% for dia in semana %}
-                    {% if dia == 0 %}
+    <div class="calendario-contenedor">
+        {% for mes in meses %}
+        <div class="calendario-mes">
+            <h3>{{ mes.nombre }}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>L</th>
+                        <th>M</th>
+                        <th>MI</th>
+                        <th>J</th>
+                        <th>V</th>
+                        <th>S</th>
+                        <th>D</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for semana in mes.semanas %}
+                    <tr>
+                        {% for dia in semana %}
+                        {% if dia == 0 %}
                         <td></td>
-                    {% elif dia == ahora.day and mes.mes_numero == ahora.month %}
+                        {% elif dia == ahora.day and mes.mes_numero == ahora.month %}
                         <td class="hoy">{{ dia }}</td>
-                    {% else %}
+                        {% else %}
                         <td>{{ dia }}</td>
-                    {% endif %}
-                {% endfor %}
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<!-- ===== edad y signo ===== -->
-<div class="form-section" id="edad">
-    <h4>Calcular Edad y Signo Zodiacal</h4>
+    <!-- ===== edad y signo ===== -->
+    <div class="form-section" id="edad">
+        <h4>Calcular Edad y Signo Zodiacal</h4>
 
-    <form method="POST" action="#edad">
-        {{ f1.hidden_tag() }}
-        {{ f1.fecha(placeholder="dd/mm/aaaa") }}
-        <button type="submit">Calcular</button>
-    </form>
+        <form method="POST" action="#edad">
+            {{ f1.hidden_tag() }}
+            {{ f1.fecha(placeholder="dd/mm/aaaa") }}
+            <button type="submit">Calcular</button>
+        </form>
 
-    {% if msg %}
+        {% if msg %}
         <p class="error">{{ msg }}</p>
-    {% endif %}
+        {% endif %}
 
-    {% if edad %}
+        {% if edad %}
         <p class="resultado">Edad: {{ edad }}</p>
-    {% endif %}
+        {% endif %}
 
-    {% if signo %}
+        {% if signo %}
         <p class="resultado">Signo: {{ signo }}</p>
-    {% endif %}
+        {% endif %}
 
-    {% if fn %}
+        {% if fn %}
         <p class="resultado">F. Nac: {{ fn }}</p>
-    {% endif %}
+        {% endif %}
 
-    {% if cumple %}
+        {% if cumple %}
         <p class="resultado">Próximo cumpleaños: {{ cumple }}</p>
-    {% endif %}
+        {% endif %}
 
-    {% if cumple_iso %}
+        {% if cumple_iso %}
         <p class="resultado contador">
             Faltan: <span id="countdown"></span>
         </p>
-    {% endif %}
-</div>
+        {% endif %}
+        </p>
 
-<!-- ===== descuento ===== -->
-<div class="form-section" id="descuento">
-    <h4>Calcular Descuento</h4>
+    </div>
 
-    <form method="POST" action="#descuento">
-        {{ f2.hidden_tag() }}
-        {{ f2.monto(step="0.01", placeholder="Monto") }}
-        {{ f2.porc(step="0.01", placeholder="Porcentaje %") }}
-        <button type="submit">Calcular</button>
-    </form>
+    <!-- ===== descuento ===== -->
+    <div class="form-section" id="descuento">
+        <h4>Calcular Descuento</h4>
 
-    {% if descuento is not none %}
+        <form method="POST" action="#descuento">
+            {{ f2.hidden_tag() }}
+            {{ f2.monto(step="0.01", placeholder="Monto") }}
+            {{ f2.porc(step="0.01", placeholder="Porcentaje %") }}
+            <button type="submit">Calcular</button>
+        </form>
+
+        {% if descuento is not none %}
         <p class="resultado">
             Total con descuento: {{ "%.2f"|format(descuento) }}
         </p>
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 
-{% if cumple_iso %}
-<script>
-    const birthday = new Date("{{ cumple_iso }}");
+    {% if cumple_iso %}
+    <script>
+        const birthdayUTC = new Date("{{ cumple_iso }}");
 
-    function updateCountdown() {
-        const now = new Date();
-        let diff = birthday - now;
+        function updateCountdown() {
+            const now = new Date();
 
-        if (diff <= 0) {
-            document.getElementById("countdown").innerText = "¡Feliz cumpleaños!";
-            return;
+            let diff = birthdayUTC.getTime() - now.getTime();
+
+            if (diff <= 0) {
+                document.getElementById("countdown").innerText = "🎉 ¡Feliz cumpleaños!";
+                return;
+            }
+
+            const totalSeconds = Math.floor(diff / 1000);
+
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            let text = "";
+
+            if (days > 0) {
+                text = `${days} días ${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                text = `${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            document.getElementById("countdown").innerText = text;
         }
 
-        const totalSeconds = Math.floor(diff / 1000);
-
-        const days = Math.floor(totalSeconds / 86400);
-        const hours = Math.floor((totalSeconds % 86400) / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-
-        document.getElementById("countdown").innerText =
-            `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-</script>
-{% endif %}
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+    {% endif %}
 
 </body>
+
 </html>

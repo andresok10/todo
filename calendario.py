@@ -66,12 +66,16 @@ def calendario_app():
 
             edad = nacimiento.diff(ahora).in_years()
 
-            cumple_d = nacimiento.replace(
+            '''cumple_d = nacimiento.replace(
                 year=ahora.year,
                 hour=0,
                 minute=0,
                 second=0
-            )
+            )'''
+            cumple_d = cumple_d.replace(hour=0, minute=0, second=0)
+
+            cumple_iso = cumple_d.to_iso8601_string()
+
 
             if cumple_d < ahora:
                 cumple_d = cumple_d.add(years=1)
@@ -135,8 +139,10 @@ def calendario_app():
         edad=edad,
         signo=signo,
         fn=fn,
-        cumple=cumple,
-        cumple_iso=cumple_iso if cumple else None,
+        #cumple=cumple,
+        #cumple_iso=cumple_iso if cumple else None,
+        cumple=cumple_d.format("DD/MM/YYYY"),
+        cumple_iso=cumple_iso,
         faltan_dias=faltan_dias,
         faltan_horas=faltan_horas,
         descuento=descuento,
