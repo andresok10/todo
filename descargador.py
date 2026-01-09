@@ -174,14 +174,12 @@ def descargax():
             }
         else:  # video
             ydl_opts = {
-                "outtmpl": final_file,  # añadir extensión aquí,
-                # "outtmpl": f"{counter}.{extension}",  # añadir extensión aquí,
-                # "outtmpl": file + ".%(ext)s",  # añadir extensión aquí,
+                "outtmpl": final_file,  # archivo con su extension
+                #"outtmpl": file + ".%(ext)s",  # archivo con su extension
                 # "format": "bestvideo+bestaudio/best",
-                # "merge_output_format": extension,  # 🔥 esta línea fuerza la extensión
                 "format": "bestvideo[ext=webm]+bestaudio[ext=webm]/best",
                 #'format': 'best',
-                "merge_output_format": extension,
+                "merge_output_format": extension, # 🔥 esta línea fuerza la extensión
                 "ffmpeg_location": FFMPEG_PATH,
                 # "quiet": False,
                 "noplaylist": True,
@@ -222,7 +220,7 @@ def descargax():
 
 @app2.route("/server/<path:output_file>") # Servir correctamente los archivos desde /downloads/
 def serve_download(output_file): # Sirve los archivos descargados directamente
-    return send_from_directory(CARPETA_DESCARGA, output_file, as_attachment=True)
+    return send_from_directory(CARPETA_DESCARGA, output_file, as_attachment=True,conditional=False)
 
 #@app2.route("/server/<path:file>") # Servir correctamente los archivos desde /downloads/
 #def serve_download(file): # Sirve los archivos descargados directamente
