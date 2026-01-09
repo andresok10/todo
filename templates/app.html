@@ -188,11 +188,12 @@
         {% endif %}
 
         {% if cumple_iso %}
-        <p class="resultado contador">
-            Faltan: <span id="countdown"></span>
+        <p class="resultado">
+            Próximo cumpleaños en:
+            <span id="contador">calculando…</span>
         </p>
         {% endif %}
-        </p>
+
 
     </div>
 
@@ -216,40 +217,33 @@
 
     {% if cumple_iso %}
     <script>
-        const birthdayUTC = new Date("{{ cumple_iso }}");
+        const cumpleISO = "{{ cumple_iso }}";
+        const cumple = new Date(cumpleISO);
 
-        function updateCountdown() {
-            const now = new Date();
-
-            let diff = birthdayUTC.getTime() - now.getTime();
+        function actualizarContador() {
+            const ahora = new Date();
+            let diff = cumple - ahora;
 
             if (diff <= 0) {
-                document.getElementById("countdown").innerText = "🎉 ¡Feliz cumpleaños!";
+                document.getElementById("contador").innerText = "¡Feliz cumpleaños! 🎉";
                 return;
             }
 
-            const totalSeconds = Math.floor(diff / 1000);
+            const totalSeg = Math.floor(diff / 1000);
+            const dias = Math.floor(totalSeg / 86400);
+            const horas = Math.floor((totalSeg % 86400) / 3600);
+            const minutos = Math.floor((totalSeg % 3600) / 60);
+            const segundos = totalSeg % 60;
 
-            const days = Math.floor(totalSeconds / 86400);
-            const hours = Math.floor((totalSeconds % 86400) / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-
-            let text = "";
-
-            if (days > 0) {
-                text = `${days} días ${hours}h ${minutes}m ${seconds}s`;
-            } else {
-                text = `${hours}h ${minutes}m ${seconds}s`;
-            }
-
-            document.getElementById("countdown").innerText = text;
+            document.getElementById("contador").innerText =
+                `${dias}d ${horas}h ${minutos}m ${segundos}s`;
         }
 
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        actualizarContador();
+        setInterval(actualizarContador, 1000);
     </script>
     {% endif %}
+
 
 </body>
 
