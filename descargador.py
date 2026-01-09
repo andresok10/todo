@@ -162,6 +162,7 @@ def descargax():
         )
         
         file_name = f"{counter}.{extension}"
+        print(file_name)
         mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
             "status": "success",
