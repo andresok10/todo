@@ -119,11 +119,8 @@ def descargax():
     print(a)
     b = [x for x in os.listdir(CARPETA_DESCARGA)]
     print(b)
-    print("xxxxxx")
     for archivo in os.listdir(CARPETA_DESCARGA):
-        # print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
-        # ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
-        # print(ruta_completa)
+        #print(archivo)
         print("   ➜", archivo, end="\n")
         """try:
             time.sleep(5)
@@ -239,10 +236,8 @@ def descargax():
         print(a)
         b = [x for x in os.listdir(CARPETA_DESCARGA)]
         print(b)
-        print("xxxxxx")
         for archivo in os.listdir(CARPETA_DESCARGA):
             print("aaa   ➜", archivo, end="\n")
-
 
 @app2.route(
     "/server/<path:output_file>"
