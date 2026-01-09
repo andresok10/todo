@@ -153,7 +153,7 @@ def descargax():
         limpiar_por_contador(extension)
         contador = siguiente_contador(extension)
         #final_name = contador+"."+extension
-        final_name = f"{contador}/{+extension}"
+        final_name = f"{contador}/{extension}"
         final_file = os.path.join(CARPETA_DESCARGA, final_name)
         '''counter = 1
         while True:
