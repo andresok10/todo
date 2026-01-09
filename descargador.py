@@ -21,16 +21,12 @@ print(FFMPEG_PATH)
 # carpeta = os.path.join(BASE_DIR, "descarga")
 # carpeta = "/opt/render/project/src/descarga"
 
-is_linux = (
-    platform.system().lower().startswith("linux")
-)  # Detectar sistema operativo == true
-
 if not os.path.exists(BASE_DIR + "/ffmpeg"):
     print("FFmpeg no encontrado... Descargando...")
     ssl._create_default_https_context = lambda: ssl.create_default_context(
         cafile=certifi.where()
     )
-    if is_linux:
+    if platform.system().lower().startswith("linux"):
         url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
         archivo = BASE_DIR + "/ffmpeg.tar.xz"  # /opt/render/project/src/ffmpeg.tar.xz
         urllib.request.urlretrieve(url, archivo)
