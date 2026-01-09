@@ -211,12 +211,6 @@ def descargax():
             _external=True,
             _scheme="https",
         )
-
-        for archivo in os.listdir(CARPETA_DESCARGA):
-            print(f"📂 Contenido actual de CARPETA_DESCARGA {archivo}:")
-            ruta_completa = os.path.join(CARPETA_DESCARGA, archivo)
-            print(ruta_completa)
-            print("   ➜", archivo, end="\n")
     
         mime_type = "audio/mp4" if extension == "m4a" else "video/webm"
         return jsonify({
