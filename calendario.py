@@ -54,7 +54,7 @@ def calendario_app():
     faltan_horas = None
     descuento = None
     msg = ""
-
+    cumple_iso = ""
     # ========= EDAD / SIGNO / CUMPLEAÑOS =========
     if f1.validate_on_submit() and f1.fecha.data:
         try:
