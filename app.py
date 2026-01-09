@@ -3,17 +3,13 @@ from datetime import datetime
 from calendario import app1
 from descargador import app2
 import os, urllib.request,zipfile ,tarfile, ssl, certifi, shutil
-        
-from bootstrap_google import bootstrap_calendar_token
-
-bootstrap_calendar_token()        
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
-@app.context_processor
-def inject_globals():
-    return {"hoy": datetime.today()}
+#@app.context_processor
+#def inject_globals():
+#    return {"hoy": datetime.today()}
 
 app.register_blueprint(app1)
 app.register_blueprint(app2)
