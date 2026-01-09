@@ -109,7 +109,8 @@ def siguiente_contador(extension):
             base = nombre.replace(f".{extension}", "")
             if base.isdigit():
                 numeros.append(int(base))
-    return max(numeros, default=0) + 1
+    #return max(numeros, default=0) + 1
+    return max(numeros, default=1) + 1
 
 @app2.route("/descarga", methods=["POST"])
 def descargax():
