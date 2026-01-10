@@ -71,8 +71,9 @@
         }
 
         .form-section {
-            max-width: 420px;
-            margin: 30px auto;
+            /*max-width: 420px;*/
+            width: 500px;
+            /*margin: 30px auto;*/
             background: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -81,7 +82,7 @@
 
         .form-section input,
         .form-section button {
-            width: 100%;
+            width: 450px;
             padding: 10px;
             margin-bottom: 10px;
             font-size: 14px;
@@ -252,64 +253,68 @@
     </div>
 
     <!-- ===== edad y signo ===== -->
-    <div class="form-section" id="edad">
-        <h4>Calcular Edad y Signo Zodiacal</h4>
+    <div style="display: flex;margin: 0 10px;text-align: center;justify-content: center;">
+        <!--<div class="form-section" id="edad">-->
+        <div style="width:40%;" id="edad">
+            <h4>Calcular Edad y Signo Zodiacal</h4>
 
-        <form method="POST" action="#edad">
-            {{ f1.hidden_tag() }}
-            {{ f1.fecha(placeholder="dd/mm/aaaa") }}
-            <button type="submit">Calcular</button>
-        </form>
+            <form method="POST" action="#edad">
+                {{ f1.hidden_tag() }}
+                {{ f1.fecha(placeholder="dd/mm/aaaa") }}
+                <button type="submit">Calcular</button>
+            </form>
 
-        {% if msg %}
-        <p class="error">{{ msg }}</p>
-        {% endif %}
+            {% if msg %}
+            <p class="error">{{ msg }}</p>
+            {% endif %}
 
-        {% if edad_anos is not none %}
-        <p class="resultado">
-            Edad: {{ edad_anos }} años,
-            {{ edad_meses }} meses,
-            {{ edad_dias }} días
-        </p>
-        {% endif %}
+            {% if edad_anos is not none %}
+            <p class="resultado">
+                Edad: {{ edad_anos }} años,
+                {{ edad_meses }} meses,
+                {{ edad_dias }} días
+            </p>
+            {% endif %}
 
-        {% if signo %}
-        <p class="resultado">Signo: {{ signo }}</p>
-        {% endif %}
+            {% if signo %}
+            <p class="resultado">Signo: {{ signo }}</p>
+            {% endif %}
 
-        {% if fn %}
-        <p class="resultado">Nacimiento: {{ fn }}</p>
-        {% endif %}
+            {% if fn %}
+            <p class="resultado">Nacimiento: {{ fn }}</p>
+            {% endif %}
 
-        {% if cumple %}
-        <p class="resultado">Próximo cumpleaños: {{ cumple }}</p>
-        {% endif %}
+            {% if cumple %}
+            <p class="resultado">Próximo cumpleaños: {{ cumple }}</p>
+            {% endif %}
 
-        {% if diff_data %}
-        <p class="resultado">
-            Falta:
-            <span id="contador" class="contador"></span>
-        </p>
-        {% endif %}
+            {% if diff_data %}
+            <p class="resultado">
+                Falta:
+                <span id="contador" class="contador"></span>
+            </p>
+            {% endif %}
+        </div>
+
+        <!-- ===== descuento ===== -->
+        <div style="width: 40%;" id="descuento">
+            <h4>Calcular Descuento</h4>
+
+            <form style="display:flex;" method="POST" action="#descuento">
+                {{ f2.hidden_tag() }}
+                {{ f2.monto(step="0.01", placeholder="Monto") }}
+                {{ f2.porc(step="0.01", placeholder="Porcentaje %") }}
+                <button type="submit">Calcular</button>
+            </form>
+
+            {% if descuento is not none %}
+            <p class="resultado">
+                Total con descuento: {{ "%.2f"|format(descuento) }}
+            </p>
+            {% endif %}
+        </div>
     </div>
 
-    <!-- ===== descuento ===== -->
-    <div class="form-section" id="descuento">
-        <h4>Calcular Descuento</h4>
-
-        <form method="POST" action="#descuento">
-            {{ f2.hidden_tag() }}
-            {{ f2.monto(step="0.01", placeholder="Monto") }}
-            {{ f2.porc(step="0.01", placeholder="Porcentaje %") }}
-            <button type="submit">Calcular</button>
-        </form>
-
-        {% if descuento is not none %}
-        <p class="resultado">
-            Total con descuento: {{ "%.2f"|format(descuento) }}
-        </p>
-        {% endif %}
-    </div>
 
     <!-- ================== DESCARGAS ================== -->
     <div class="descarga-container" id="descargar-form">
