@@ -18,7 +18,7 @@
 
         h4 {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .calendario-contenedor {
@@ -72,18 +72,24 @@
 
         .form-section {
             /*max-width: 420px;*/
-            width: 500px;
+            width: 400px;
             /*margin: 30px auto;*/
             background: #fff;
-            padding: 20px;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            align-self: center;
+            justify-items: center;
+            /*padding: 20px;*/
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .form-section input,
         .form-section button {
-            width: 450px;
-            padding: 10px;
+            width: 370px;
+            padding: 5px;
+            text-align: center;
             margin-bottom: 10px;
             font-size: 14px;
             border-radius: 6px;
@@ -251,12 +257,12 @@
         </div>
         {% endfor %}
     </div>
-
+    <br>
     <!-- ===== edad y signo ===== -->
-    <div style="display: flex;margin: 0 10px;text-align: center;justify-content: center;">
-        <!--<div class="form-section" id="edad">-->
-        <div style="width:40%;" id="edad">
-            <h4>Calcular Edad y Signo Zodiacal</h4>
+    <div style="display: flex;margin: 0 0px;gap:20px;justify-content: center;">
+        <div class="form-section" id="edad">
+        <!--<div style="width:40%;" id="edad">-->
+            <h6>Calcular Edad y Signo Zodiacal</h6>
 
             <form method="POST" action="#edad">
                 {{ f1.hidden_tag() }}
@@ -297,10 +303,10 @@
         </div>
 
         <!-- ===== descuento ===== -->
-        <div style="width: 40%;" id="descuento">
-            <h4>Calcular Descuento</h4>
+        <div class="form-section" id="descuento">
+            <h6>Calcular Descuento</h6>
 
-            <form style="display:flex;" method="POST" action="#descuento">
+            <form method="POST" action="#descuento">
                 {{ f2.hidden_tag() }}
                 {{ f2.monto(step="0.01", placeholder="Monto") }}
                 {{ f2.porc(step="0.01", placeholder="Porcentaje %") }}
@@ -314,7 +320,6 @@
             {% endif %}
         </div>
     </div>
-
 
     <!-- ================== DESCARGAS ================== -->
     <div class="descarga-container" id="descargar-form">
