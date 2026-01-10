@@ -21,7 +21,7 @@ print(FFMPEG_PATH)
 # carpeta = os.path.join(BASE_DIR, "descarga")
 # carpeta = "/opt/render/project/src/descarga"
 
-'''if not os.path.exists(BASE_DIR + "/ffmpeg"):
+if not os.path.exists(BASE_DIR + "/ffmpeg"):
     print("FFmpeg no encontrado... Descargando...")
     ssl._create_default_https_context = lambda: ssl.create_default_context(
         cafile=certifi.where()
@@ -37,7 +37,7 @@ print(FFMPEG_PATH)
             print("Carpetas dentro del tar:", nombres)
             tar.extractall(BASE_DIR, filter="data")
             print("✅ Archivo Extraído")
-        carpeta_extraida = "ffmpeg-7.0.2-amd64-static"'''
+        carpeta_extraida = "ffmpeg-7.0.2-amd64-static"
 
         #carpeta_extraidax = [x for x in os.listdir(ffmpeg_dir) if os.path.isdir(os.path.join(ffmpeg_dir, x)) and not x.startswith(("__", "."))]
         #print(carpeta_extraidax)
@@ -46,7 +46,7 @@ print(FFMPEG_PATH)
 
         #carpetas = [x for x in Path(ffmpeg_dir).iterdir() if x.is_dir() and not x.name.startswith(("__", "."))]
         #ultima_carpeta = max(carpetas, key=lambda x: x.stat().st_mtime)
-        #print("Última carpeta:", ultima_carpeta.name)"""
+        #print("Última carpeta:", ultima_carpeta.name)
 
         #for x in os.listdir(ffmpeg_dir):
         #    print(x)
@@ -55,7 +55,7 @@ print(FFMPEG_PATH)
         #for f in glob.glob(os.path.join(ffmpeg_dir, "*")):
         #    print(f"📂 Contenido actual 2 de ffmpeg_dir {f}:")"""
 
-"""if not os.path.exists(BASE_DIR + "/ffmpeg"):
+        if not os.path.exists(BASE_DIR + "/ffmpeg"):
             os.rename(BASE_DIR + "/" + carpeta_extraida, BASE_DIR + "/ffmpeg")
             print("✅ Carpeta renombrada a ffmpeg")
         else:
@@ -76,7 +76,7 @@ print(FFMPEG_PATH)
         )  # os.chmod(f"{ffmpeg_dir}/ffmpeg/ffmpeg", 0o755)
         # os.chmod(ffmpeg_bin, 0o755) # os.chmod(ffprobe_bin, 0o755)
     else:
-        raise Exception("❌ Sistema operativo no soportado")"""
+        raise Exception("❌ Sistema operativo no soportado")
 ##################################################
 MAX_ARCHIVOS = 1  # conserva solo los últimos N archivos
 def limpiar_por_contador(extension): #Elimina archivos 1.ext, 2.ext, ...dejando solo los últimos MAX_ARCHIVOS
