@@ -13,12 +13,12 @@
             margin: 0;
             padding: 0;
             background: #000000;
-            color: #f1dede;
+            color: #ffffff;
         }
 
         h4 {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .calendario-contenedor {
@@ -26,7 +26,7 @@
             gap: 10px;
             overflow-x: auto;
             padding: 10px;
-            background-color: #000000;
+            background-color: #3b3939;
         }
 
         .calendario-mes {
@@ -74,7 +74,7 @@
             /*max-width: 420px;*/
             width: 400px;
             /*margin: 30px auto;*/
-            background: #fff;
+            background: #3b3939;
             justify-content: center;
             text-align: center;
             align-items: center;
@@ -125,9 +125,10 @@
 
         /*================== ESTILOS DESCARGA ==================*/
         .descarga-container {
+            text-align: center;
             max-width: 500px;
             margin: 40px auto;
-            background: #fff;
+            background: #3b3939;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -148,7 +149,7 @@
 
         .descarga-container input,
         .descarga-container select {
-            width: 100%;
+            width: 450px;
             padding: 12px;
             margin-bottom: 18px;
             border: 1px solid #ccc;
@@ -262,7 +263,7 @@
     <div style="display: flex;margin: 0 0px;gap:20px;justify-content: center;">
         <div class="form-section" id="edad">
         <!--<div style="width:40%;" id="edad">-->
-            <h6>Calcular Edad y Signo Zodiacal</h6>
+            <h4>Calcular Edad y Signo Zodiacal</h4>
 
             <form method="POST" action="#edad">
                 {{ f1.hidden_tag() }}
@@ -304,7 +305,7 @@
 
         <!-- ===== descuento ===== -->
         <div class="form-section" id="descuento">
-            <h6>Calcular Descuento</h6>
+            <h4>Calcular Descuento</h4>
 
             <form method="POST" action="#descuento">
                 {{ f2.hidden_tag() }}
@@ -323,7 +324,7 @@
 
     <!-- ================== DESCARGAS ================== -->
     <div class="descarga-container" id="descargar-form">
-        <h2>Descargar Video o Audio</h2>
+        <h4>Descargar Video o Audio</h4>
         <!--<form method="POST" action="/descargar">      esto ya lo maneja ajax -->
         <form>
             <div class="form-group">
