@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0">
+
+        <meta
+            http-equiv="X-UA-Compatible"
+            content="IE=edge">
+
+        <title>Calendario y Calculadora</title>
+
+        <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            margin: 0;
+
+            padding: 0;
+
+            background: #000000;
+
+            color: #ffffff;
+
+        }
+
+
+        h4 {
+
+            text-align: center;
+
+            margin-top: 15px;
+
+        }
+
+
+        .calendario-contenedor {
+
+            display: flex;
+
+            gap: 10px;
+
+            overflow-x: auto;
+
+            padding: 10px;
+
+            background-color: #3b3939;
+
+        }
+
+
+        .calendario-mes {
+
+            min-width: 200px;
+
+            border-radius: 8px;
+
+            padding: 8px;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .calendario-mes h3 {
+
+            text-align: center;
+
+            font-size: 15px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .calendario-mes table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            text-align: center;
+
+            font-size: 15px;
+
+        }
+
+
+        .calendario-mes th {
+
+            background: #007bff;
+
+            color: white;
+
+            padding: 3px;
+
+            font-size: 15px;
+
+        }
+
+
+        .calendario-mes td {
+
+            padding: 3px;
+
+            height: 20px;
+
+        }
+
+
+        .calendario-mes .hoy {
+
+            background: #ff5722;
+
+            color: white;
+
+            border-radius: 50%;
+
+            font-weight: bold;
+
+        }
+
+
+        .form-section {
+
+            width: 350px;
+
+            background: #3b3939;
+
+            padding: 5px;
+
+            border-radius: 8px;
+
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+        }
+
+
+        .form-section input,
+
+        .form-section button {
+
+            text-align: center;
+
+            width: 250px;
+
+            padding: 5px;
+
+            margin-bottom: 5px;
+
+            font-size: 22px;
+
+            border-radius: 8px;
+
+            border: 1px solid #ccc;
+
+        }
+
+
+        .form-section button {
+
+            background: #007bff;
+
+            color: white;
+
+            border: none;
+
+            cursor: pointer;
+
+        }
+
+
+        .form-section button:hover {
+
+            background: #0056b3;
+
+        }
+
+
+        .resultado {
+
+            font-weight: bold;
+
+            text-align: center;
+
+            margin-top: 6px;
+
+        }
+
+
+        .error {
+
+            color: #ff4444;
+
+            text-align: center;
+
+        }
+
+
+        .contador {
+
+            font-size: 1.1em;
+
+            color: #007bff;
+
+        }
+
+
+        /* =====================================================
+           DESCARGA
+           ===================================================== */
+
+        .descarga-container {
+
+            text-align: center;
+
+            max-width: 500px;
+
+            margin: 40px auto;
+
+            background: #3b3939;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+
+        .descarga-container h2 {
+
+            text-align: center;
+
+            margin-bottom: 20px;
+
+            font-size: 1.6rem;
+
+            color: #222;
+
+        }
+
+
+        .descarga-container label {
+
+            font-weight: bold;
+
+            display: block;
+
+            margin-bottom: 6px;
+
+        }
+
+
+        .descarga-container input,
+
+        .descarga-container select {
+
+            width: 450px;
+
+            max-width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 18px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 1rem;
+
+            transition: border-color 0.3s;
+
+        }
+
+
+        .descarga-container input:focus,
+
+        .descarga-container select:focus {
+
+            border-color: #007bff;
+
+            outline: none;
+
+        }
+
+
+        .descarga-container button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            background: #007bff;
+
+            color: #fff;
+
+            font-size: 1rem;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            transition: background 0.3s;
+
+        }
+
+
+        .descarga-container button:hover {
+
+            background: #0056b3;
+
+        }
+
+
+        form {
+
+            justify-content: center;
+
+            text-align: center;
+
+            justify-items: center;
+
+            justify-self: center;
+
+            align-items: center;
+
+            align-self: center;
+
+        }
+
+    </style>
+
+    </head>
+
+    <body>
+
+        <!-- =====================================================
+         CALENDARIO
+         ===================================================== -->
+
+        <h4>Calendario {{ ahora.year }}</h4>
+
+        <div class="calendario-contenedor">
+
+            {% for mes in meses %}
+
+            <div class="calendario-mes">
+
+                <h3>
+                    {{ mes.nombre }}
+                </h3>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>L</th>
+
+                            <th>M</th>
+
+                            <th>MI</th>
+
+                            <th>J</th>
+
+                            <th>V</th>
+
+                            <th>S</th>
+
+                            <th>D</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for semana in mes.semanas %}
+
+                        <tr>
+
+                            {% for dia in semana %}
+
+                            {% if dia == 0 %}
+
+                            <td></td>
+
+                            {% elif dia == ahora.day and mes.mes_numero == ahora.month %}
+
+                            <td class="hoy">
+                                {{ dia }}
+                            </td>
+
+                            {% else %}
+
+                            <td>
+                                {{ dia }}
+                            </td>
+
+                            {% endif %}
+
+                            {% endfor %}
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- =====================================================
+         EDAD Y SIGNO
+         ===================================================== -->
+
+        <div
+            style="
+            display:flex;
+            margin-top:20px;
+            gap:10px;
+        ">
+
+            <div
+                class="form-section"
+                id="edad">
+
+                <h4>
+                    Calcular Edad y Signo Zodiacal
+                </h4>
+
+                <form
+                    method="POST"
+                    action="#edad">
+
+                    {{ f1.hidden_tag() }}
+
+                    {{ f1.fecha(
+                    placeholder="dd/mm/aaaa"
+                    ) }}
+
+                    <button type="submit">
+                        Calcular
+                    </button>
+
+                </form>
+
+                {% if msg %}
+
+                <p class="error">
+                    {{ msg }}
+                </p>
+
+                {% endif %}
+
+                {% if edad_anos is not none %}
+
+                <p class="resultado">
+
+                    Edad:
+                    {{ edad_anos }}
+                    años,
+
+                    {{ edad_meses }}
+                    meses,
+
+                    {{ edad_dias }}
+                    días
+
+                </p>
+
+                {% endif %}
+
+                {% if signo %}
+
+                <p class="resultado">
+
+                    Signo:
+                    {{ signo }}
+
+                </p>
+
+                {% endif %}
+
+                {% if fn %}
+
+                <p class="resultado">
+
+                    Nacimiento:
+                    {{ fn }}
+
+                </p>
+
+                {% endif %}
+
+                {% if cumple %}
+
+                <p class="resultado">
+
+                    Próximo cumpleaños:
+                    {{ cumple }}
+
+                </p>
+
+                {% endif %}
+
+                {% if diff_data %}
+
+                <p class="resultado">
+
+                    Falta:
+
+                    <span class="contador">
+
+                        {{ diff_data }}
+
+                    </span>
+
+                </p>
+
+                {% endif %}
+
+            </div>
+
+            <!-- =================================================
+             DESCUENTO
+             ================================================= -->
+
+            <div
+                class="form-section"
+                id="descuento">
+
+                <h4>
+                    Calcular Descuento
+                </h4>
+
+                <form
+                    method="POST"
+                    action="#descuento">
+
+                    {{ f2.hidden_tag() }}
+
+                    {{ f2.monto(
+                    step="0.01",
+                    placeholder="Monto"
+                    ) }}
+
+                    {{ f2.porc(
+                    step="0.01",
+                    placeholder="Porcentaje %"
+                    ) }}
+
+                    <button type="submit">
+                        Calcular
+                    </button>
+
+                </form>
+
+                {% if descuento is not none %}
+
+                <p class="resultado">
+
+                    Total con descuento:
+
+                    {{ "%.2f"|format(descuento) }}
+
+                </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <!-- =====================================================
+         DESCARGA
+         ===================================================== -->
+
+        <div
+            class="descarga-container"
+            id="descargar-form">
+
+            <h4>
+                Descargar Video o Audio
+            </h4>
+
+            <form
+                method="POST"
+                action="/descarga">
+
+                <div class="form-group">
+
+                    <label for="url">
+
+                        Ingresa la URL:
+
+                    </label>
+
+                    <input
+                        type="url"
+                        id="url"
+                        name="url"
+                        required
+                        placeholder="https://www.ejemplo.com/video">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="download_type">
+
+                        Tipo de descarga:
+
+                    </label>
+
+                    <select
+                        id="download_type"
+                        name="download_type">
+
+                        <option value="video">
+                            Video
+                        </option>
+
+                        <option value="audio">
+                            Audio
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <button type="submit">
+
+                    Descargar
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </body>
+
+</html>
