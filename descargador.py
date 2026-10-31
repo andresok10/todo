@@ -109,6 +109,7 @@ def descargax():
                 "outtmpl": str(carpeta / f"{identificador}.%(ext)s"),
                 "noplaylist": True,
                 "ffmpeg_location": ffmpeg,
+                "js_runtimes": {"node": {}},
                 "quiet": True,
                 "no_warnings": True,
                 "socket_timeout": 30,

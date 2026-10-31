@@ -1,14 +1,20 @@
 # Publicar Todo en Render
 
-Publica esta carpeta `todo_web` como raíz de un repositorio de GitHub. Las carpetas `todo_android` y `todo_render` son clientes Android y no se suben como backend de Render.
+Publica esta carpeta `todo_web` como raíz de un repositorio de GitHub. Las carpetas `todo_android` y `todo_render` son clientes Android y no se suben como backend.
 
-## Despliegue
+## Despliegue sin Docker
 
-1. Crea un repositorio y sube los archivos de esta carpeta, incluidos Dockerfile, requirements.txt, render.yaml, templates y static. No subas ffmpeg de Windows, descarga, contadores.sqlite3 ni archivos .env.
-2. En Render elige New > Blueprint y conecta ese repositorio. Render encontrará render.yaml, instalará FFmpeg para Linux y Deno para yt-dlp, y arrancará Flask con Gunicorn.
-3. Si usas New > Web Service: selecciona Docker, Dockerfile Path `./Dockerfile`, Docker Context `.` y deja Docker Command vacío. Configura SECRET_KEY con un valor aleatorio y TEMPORARY_DOWNLOADS=1. El Dockerfile configura FFmpeg y el puerto automáticamente.
-4. Abre la URL HTTPS que Render asigne. Verifica Calculadoras, Descargas y Calendario.
-5. Usa esa misma URL en los dos clientes Android mediante las propiedades Gradle `flaskBaseUrl` (todo_android) y `webBaseUrl` (todo_render), y vuelve a generar sus APK. El usuario no necesita escribir el servidor en pantalla.
+El script `C:\dev\APP_TODO\subir_todo.py` publica el backend y crea o actualiza un servicio Render con runtime nativo de Python. Render instala `requirements.txt`, inicia Flask con Gunicorn y trae FFmpeg en su runtime nativo. `yt-dlp` usa Node para los retos JavaScript de YouTube.
+
+Conecta una vez GitHub a Render para que Render tenga acceso al repositorio. Después ejecuta:
+
+```powershell
+python C:\dev\APP_TODO\subir_todo.py
+```
+
+También puedes crear el servicio con New > Blueprint; Render usa el `render.yaml` de esta carpeta. No selecciones Docker. Configura `SECRET_KEY` y `TEMPORARY_DOWNLOADS=1` si creas el servicio manualmente.
+
+Usa la URL HTTPS que Render asigne en los clientes Android mediante `flaskBaseUrl` (todo_android) y `webBaseUrl` (todo_render), y vuelve a generar sus APK. El usuario no necesita escribir el servidor en pantalla.
 
 ## Archivos y estado
 
