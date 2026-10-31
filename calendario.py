@@ -29,7 +29,10 @@ def calendario_app():
     meses = [{"nombre": nombres[m], "mes_numero": m, "semanas": calendar.Calendar().monthdayscalendar(ahora.year, m)} for m in range(ahora.month, 13)]
     edad_anos = edad_meses = edad_dias = None
     signo = fn = cumple = msg = ""
-    diff_data = descuento = None
+    dias_hasta_cumple = descuento = None
+    panel = request.form.get("panel", request.args.get("panel", "calculadoras"))
+    if panel not in ("calculadoras", "descargas", "calendario"):
+        panel = "calculadoras"
     accion = request.form.get("accion")
     if request.method == "POST" and accion == "edad":
         fecha = f1.fecha.data
@@ -45,7 +48,7 @@ def calendario_app():
                 if cumple_d < hoy:
                     year = hoy.year + 1
                     cumple_d = nacimiento.set(year=year, day=min(nacimiento.day, calendar.monthrange(year, nacimiento.month)[1]))
-                diff_data = {"target": cumple_d.int_timestamp * 1000}
+                dias_hasta_cumple = max(0, cumple_d.start_of("day").diff(hoy).in_days())
                 limites = [
                     (120, "Capricornio"),
                     (219, "Acuario"),
@@ -87,7 +90,8 @@ def calendario_app():
         signo=signo,
         fn=fn,
         cumple=cumple,
-        diff_data=diff_data,
+        dias_hasta_cumple=dias_hasta_cumple,
+        panel=panel,
         descuento=descuento,
         msg=msg,
     )
