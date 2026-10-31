@@ -1,15 +1,6 @@
-flask
-requests
-Flask-WTF
-pendulum
-zodiac-sign
-babel
-google-api-python-client
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
-gunicorn
-yt-dlp[default]
-curl_cffi
-certifi
-yt-dlp-ejs
+Flask>=3.1,<4
+Flask-WTF>=1.3,<2
+pendulum>=3.1,<4
+Babel>=2.17,<3
+yt-dlp[default]>=2026.8.19
+gunicorn>=23; sys_platform != "win32"
